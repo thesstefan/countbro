@@ -26,7 +26,7 @@ struct IMAGE_HEADER {
     int pixel_per_meter_y;
     unsigned int used_color_map_entries;
     unsigned int significant_colors;
-} __attributte__((__packed__));
+} __attribute__((__packed__));
 
 struct PIXEL {
     unsigned char red;
@@ -40,8 +40,8 @@ struct Image {
     struct PIXEL *pixels;
 };
 
-struct Image *read_image_form_file(char *file_name);
-struct Image *write_image_to_file(struct Image *image, char *file_name);
+struct Image *read_image_from_file(char *file_name);
+void write_image_to_file(struct Image *image, char *file_name);
 void delete_image(struct Image *image);
 
 #endif
