@@ -9,19 +9,21 @@ struct Kernel {
     char *kernel;
     int width;
     int heigth;
-}
+};
 
 enum kernel_state {FIT, HIT, OUT};
 
-struct Kernel *squareKernel(int size);
-void delete_kernel(struct Kernel kernel);
+struct Kernel *square_kernel(int size);
+void delete_kernel(struct Kernel *kernel);
 
-enum kernel_state check_kernel(binary_image image, struct Kernel *kernel, int x, int y);
+enum kernel_state check_kernel(binary_image image, int width, int heigth, struct Kernel *kernel, int x, int y);
 
-void binary_image erosion(binary_image image, struct Kernel *kernel);
-void binary_image dilation(binary_image image, struct Kernel *kernel);
+void fill_square(binary_image image, int width, int heigth, int square_size, enum binary_color new_color, int x, int y);
 
-void binary_image opening(binary_image image, struct Kernel *kernel);
-void binary_image closing(binary_image image, strcut Kernel *kernel);
+void erosion(binary_image image, struct Kernel *kernel);
+void dilation(binary_image image, int heigth, int width, struct Kernel *kernel);
+
+void opening(binary_image image, struct Kernel *kernel);
+void closing(binary_image image, struct Kernel *kernel);
 
 #endif
