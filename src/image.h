@@ -17,7 +17,7 @@ struct FILE_HEADER {
 struct IMAGE_HEADER {
     unsigned int header_size;
     int width;
-    int heigth;
+    int height;
     uint16_t planes;
     uint16_t bits_per_pixel;
     unsigned int compression_type;
@@ -37,7 +37,7 @@ struct PIXEL {
 struct Image {
     struct FILE_HEADER file_header;
     struct IMAGE_HEADER image_header;
-    struct PIXEL *pixels;
+    struct PIXEL **pixels;
 };
 
 struct Image *read_image_from_file(char *file_name);

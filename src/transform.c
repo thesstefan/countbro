@@ -1,63 +1,75 @@
 #include "transform.h"
 
-unsigned char brightness(struct PIXEL *pixel) {
-    return (0.9 * pixel->red + 0.5 * pixel->green + 0.5 * pixel->blue);
-//    return (pixel->red + pixel->green + pixel->blue) / 3;
+unsigned char brightness(struct PIXEL pixel) {
+    return (0.9 * pixel.red + 0.5 * pixel.green + 0.5 * pixel.blue);
 }
 
-grayscale_image to_grayscale_matrix(struct Image *image, double *treshold_ct) {
-    int image_size = image->image_header.heigth * image->image_header.width;
-    unsigned char *grayscale_matrix = malloc(image_size * sizeof(unsigned char)); 
+struct grayscale_image *to_grayscale_matrix(struct Image *image, double *treshold_ct) {
+    struct grayscale_image *grayscale = malloc(sizeof(struct grayscale_image)); 
+    
+    grayscale->height = image->image_header.height;
+    grayscale->width = image->image_header.width;
+
+    grayscale->matrix = malloc(grayscale->width * grayscale->height * sizeof(unsigned char));
+    
     long long sum = 0;
+    int image_size = image->image_header.height * image->image_header.width;
 
-    for (int heigth = 0; heigth < image->image_header.heigth; heigth++) {
+    for (int height = 0; height < image->image_header.height; height++) {
         for (int width = 0; width < image->image_header.width; width++) {
-            int pixel_position = heigth * image->image_header.width + width;
-            *(grayscale_matrix + pixel_position) = brightness(image->pixels + pixel_position);
-            sum += brightness(image->pixels + pixel_position);
+            grayscale->matrix[height][width] = brightness(image->pixels[height][width]);
+
+            sum += brightness(image->pixels[height][width]);
         }
 
-    *treshold_ct = sum / image_size;
+        *treshold_ct = sum / image_size;
     }
 
-    return grayscale_matrix;
+    return grayscale;
 }
 
-void from_grayscale_matrix(grayscale_image grayscale_matrix, struct Image *image) {
-    for (int heigth = 0; heigth < image->image_header.heigth; heigth++) {
+void from_grayscale_matrix(struct grayscale_image *grayscale, struct Image *image) {
+    for (int height = 0; height < image->image_header.height; height++) {
         for (int width = 0; width < image->image_header.width; width++) {
-            int pixel_position = heigth * image->image_header.width + width;
-
-            (image->pixels + pixel_position)->red = grayscale_matrix[pixel_position];
-            (image->pixels + pixel_position)->green = grayscale_matrix[pixel_position];
-            (image->pixels + pixel_position)->blue = grayscale_matrix[pixel_position];
-            
+            image->pixels[height][width].red = grayscale->matrix[height][width];
+            image->pixels[height][width].green = grayscale->matrix[height][width];
+            image->pixels[height][width].blue = grayscale->matrix[height][width]; 
         }
     }
 }
 
-binary_image treshold(unsigned char *grayscale_matrix, int size, int treshold_constant) {
-    binary_image binary_color_matrix = malloc(size * sizeof(enum binary_color));
+struct binary_image *treshold(struct grayscale_image *grayscale, int treshold_constant) {
+    struct binary_image *binary = malloc(sizeof(struct binary_image));
 
-    for (int index = 0; index < size; index++) {
-        if ((int)grayscale_matrix[index] < treshold_constant)
-           binary_color_matrix[index] = BLACK;
-        else
-           binary_color_matrix[index] = WHITE;
-    }
+    binary->height = grayscale->height;
+    binary->width = grayscale->width;
 
-    return binary_color_matrix;
+    binary->matrix = malloc(binary->height * binary->width * sizeof(enum binary_color));
+
+    for (int height = 0; height < binary->height; height++)
+        for (int width = 0; width < binary->width; width++)
+            if ((int)grayscale->matrix[height][width] < treshold_constant)
+                binary->matrix[height][width] = BLACK;
+            else
+                binary->matrix[height][width] = WHITE;
+
+    return binary;
 } 
 
-grayscale_image from_binary_to_grayscale(binary_image binary, int size) {
-    grayscale_image grayscale = malloc(size * sizeof(unsigned char));
+struct grayscale_image *from_binary_to_grayscale(struct binary_image *binary) {
+    struct grayscale_image *grayscale = malloc(sizeof(struct grayscale_image));
 
-    for (int index = 0; index < size; index++) {
-        if (binary[index] == BLACK)
-            grayscale[index] = _BLACK;
-        else
-            grayscale[index] = _WHITE;
-    }
+    grayscale->height = binary->height;
+    grayscale->width = binary->width;
+
+    grayscale->matrix = malloc(grayscale->height * grayscale->width * sizeof(unsigned char));
+
+    for (int height = 0; height < binary->height; height++)
+        for (int width = 0; width < binary->width; width++)
+            if (binary->matrix[height][width] == BLACK)
+                grayscale->matrix[height][width] = _BLACK;
+            else
+                grayscale->matrix[height][width] = _WHITE;
 
     return grayscale;
 }
