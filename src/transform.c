@@ -28,15 +28,20 @@ struct grayscale_image *to_grayscale_matrix(struct Image *image, double *treshol
     return grayscale;
 }
 
+/*
+
 void from_grayscale_matrix(struct grayscale_image *grayscale, struct Image *image) {
     for (int height = 0; height < image->image_header.height; height++) {
         for (int width = 0; width < image->image_header.width; width++) {
-            image->pixels[height][width].red = grayscale->matrix[height][width];
-            image->pixels[height][width].green = grayscale->matrix[height][width];
-            image->pixels[height][width].blue = grayscale->matrix[height][width]; 
+            if (grayscale->matrix[height][width] == BLACK)
+                image->pixels[height][width] = {0,0,0};         // BLACK
+            else 
+                image->pixels[height][width] = {255, 255, 255}; // WHITE    
         }
     }
 }
+
+*/
 
 struct binary_image *treshold(struct grayscale_image *grayscale, int treshold_constant) {
     struct binary_image *binary = malloc(sizeof(struct binary_image));
@@ -67,9 +72,9 @@ struct grayscale_image *from_binary_to_grayscale(struct binary_image *binary) {
     for (int height = 0; height < binary->height; height++)
         for (int width = 0; width < binary->width; width++)
             if (binary->matrix[height][width] == BLACK)
-                grayscale->matrix[height][width] = _BLACK;
+                grayscale->matrix[height][width] = BLACK;
             else
-                grayscale->matrix[height][width] = _WHITE;
+                grayscale->matrix[height][width] = WHITE;
 
     return grayscale;
 }
