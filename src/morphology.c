@@ -1,13 +1,9 @@
 #include "colors.h"
 #include "morphology.h"
 
-int bound(int value, int min, int max) {
-    if (value < min)
-        return min;
-    if (value > max)
-        return max;
-    return value;
-}
+#define min(a,b) ((a) < (b)) ? (a) : (b)
+#define max(a,b) ((a) > (b)) ? (a) : (b)
+#define bound(a, b, c) (max(min(a, c), b))
 
 enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kernel, int x, int y) {
     int kernel_width_index = 0;
