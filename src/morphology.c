@@ -1,16 +1,12 @@
 #include "colors.h"
 #include "morphology.h"
 
-void make_safe(struct binary_image *image, struct Kernel *kernel, int *width, int *height) {
-    if (*height < 0)
-        *height = 0;
-    else if (*height >= image->height)
-        *height = image->height - 1;
-
-    if (*width < 0)
-        *width = 0;
-    else if (*width >= image->width)
-        *width = image->width - 1;
+int bound(int value, int min, int max) {
+    if (value < min)
+        return min;
+    if (value > max)
+        return max;
+    return value;
 }
 
 enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kernel, int x, int y) {
@@ -25,7 +21,8 @@ enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kerne
             int safe_height = height;
             int safe_width  = width;
 
-            make_safe(image, kernel, &safe_height, &safe_width);
+            safe_height = bound(height, 0, image->height - 1);
+            safe_width = bound(width, 0, image->width - 1);
 
             if (*(kernel->kernel + kernel_height_index * kernel->width + kernel_width_index) == 1) {
                 kernel_size++;
