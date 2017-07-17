@@ -1,6 +1,18 @@
 #include "colors.h"
 #include "morphology.h"
 
+void make_safe(struct binary_image *image, struct Kernel *kernel, int *width, int *height) {
+    if (*height < 0)
+        *height = 0;
+    else if (*height >= image->height)
+        *height = image->height - 1;
+
+    if (*width < 0)
+        *width = 0;
+    else if (*width >= image->width)
+        *width = image->width - 1;
+}
+
 enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kernel, int x, int y) {
     int kernel_width_index = 0;
     int kernel_height_index = 0;
@@ -9,27 +21,16 @@ enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kerne
     int kernel_size = 0;
 
     for (int height = y - kernel->height / 2; height <= y + kernel->height / 2; height++) {
-        int _height = height;
-
-        if (height < 0)
-            _height = 0;
-
-        if (height >= image->height)
-            _height = image->height - 1;
-
         for (int width = x - kernel->width / 2; width <= x + kernel->width / 2; width++) {
-            int _width = width;
+            int safe_height = height;
+            int safe_width  = width;
 
-            if (width < 0)
-                _width = 0;
-
-            if (width >= image->width)
-                _width = image->width - 1;
+            make_safe(image, kernel, &safe_height, &safe_width);
 
             if (*(kernel->kernel + kernel_height_index * kernel->width + kernel_width_index) == 1) {
                 kernel_size++;
 
-                if (*(image->matrix + _height * image->width + _width) == WHITE)
+                if (*(image->matrix + safe_height * image->width + safe_width) == WHITE)
                     kernel_state_count++;
             }
 
