@@ -37,7 +37,7 @@ struct PIXEL {
 struct Image {
     struct FILE_HEADER file_header;
     struct IMAGE_HEADER image_header;
-    struct PIXEL **pixels;
+    struct PIXEL *pixels;
 };
 
 struct Image *read_image_from_file(char *file_name);

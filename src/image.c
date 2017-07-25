@@ -1,23 +1,23 @@
 #include "image.h"
 
-void _read_pixels(int height, int width, struct PIXEL **pixels, FILE *input) {
+void _read_pixels(int height, int width, struct PIXEL *pixels, FILE *input) {
     int subpixels_per_line = width * 3;
     int required_padding = (subpixels_per_line % 4) ? 4 - subpixels_per_line % 4 : 0;
     int padding_dump = 0;
 
     for (int height_index = height - 1; height_index >= 0; height_index--) {
-        fread(&(pixels[height_index]), sizeof(struct PIXEL), width, input);
+        fread(pixels + height_index * width, sizeof(struct PIXEL), width, input);
         fread(&padding_dump, sizeof(unsigned char), required_padding, input);
     }
 }
 
-void _write_pixels(int height, int width, struct PIXEL **pixels, FILE *output) {
+void _write_pixels(int height, int width, struct PIXEL *pixels, FILE *output) {
     int subpixels_per_line = width * 3;
     int required_padding = (subpixels_per_line % 4) ? 4 - subpixels_per_line % 4 : 0;
     int padding_dump = 0;
 
     for (int height_index = height - 1; height_index >= 0; height_index--) {
-        fwrite(&(pixels[height_index]), sizeof(struct PIXEL), width, output);
+        fwrite(pixels + height_index * width, sizeof(struct PIXEL), width, output);
         fwrite(&padding_dump, 1, required_padding, output);
     }
 }
