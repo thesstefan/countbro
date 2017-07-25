@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -std=c99
 DEPS = colors.h image.h morphology.h transform.h
-OBJ = image.o morphology.o transform.o
+OBJ = build/image.o build/morphology.o build/transform.o
 
 %.o: src/%.c
 	$(CC) -c -o build/$@ $< $(CFLAGS)
