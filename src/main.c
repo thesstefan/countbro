@@ -19,16 +19,17 @@ int main(int argc, char *argv[]) {
 
     struct grayscale_image *tresholded_grayscale = from_binary_to_grayscale(binary);
 
-
-// GOOD (?)
    from_grayscale_matrix(tresholded_grayscale, image);
 
-// GOOD
    write_image_to_file(image, argv[2]);
 
-//    delete_image(image);
- //   free(grayscale);
+   delete_image(image);
 
+   free(grayscale);
+   free(binary);
+   free(opening_kernel);
+   free(closing_kernel);
+   free(tresholded_grayscale);
 
     return 0;
 }
