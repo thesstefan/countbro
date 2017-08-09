@@ -171,13 +171,45 @@ C. Binary Tree
     - Fast traversal / find
     - Can't add duplicates
 
-                                                                                    WINNER : Binary Tree
+6. Complexities
 
+A. Array
 
+    I. Time Complexity 
 
+                     Average    Worst
 
+    - Access    :    O(1)       O(1)
+    - Search    :    O(n)       O(n)
+    - Insertion :    O(n)       O(n)
+    - Deletion  :    O(n)       O(n)
 
+    II. Space Complexity : O(n)
 
+B. Linked List
 
+    I. Time Complexity 
+
+                     Average      Worst
+
+    - Access    :    O(n)       O(n)
+    - Search    :    O(n)       O(n)
+    - Insertion :    O(1)       O(1)
+    - Deletion  :    O(1)       O(1)
+
+    II. Space Complexity : O(n)
+
+C. Binary Tree
+
+    I. Time Complexity 
+
+                     Average    Worst
+
+    - Access    :    O(log(n))  O(n)
+    - Search    :    O(log(n))  O(n)
+    - Insertion :    O(log(n))  O(n)
+    - Deletion  :    O(log(n))  O(n)
+
+    II. Space Complexity : O(n)
 
 
