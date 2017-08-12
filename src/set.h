@@ -6,6 +6,7 @@
 
 struct Set {
     // add internal representation of a set
+    struct Vector *representation;
 };
 
 /**
@@ -22,7 +23,7 @@ struct Set* set_create();
  * 
  * @return none
  */
-void set_delete(struct Set *s);
+void set_delete(struct Set *set);
 
 
 /**
@@ -35,7 +36,7 @@ void set_delete(struct Set *s);
  *         0 on failure (e.g. the element already exists) - the set is not
  *         changed
  */
-int set_add(struct Set *s, int x);
+int set_add(struct Set *set, int item);
 
 /**
  * @brief Remove an element from the set
@@ -47,7 +48,7 @@ int set_add(struct Set *s, int x);
  *         0 on failure (e.g. the element does not exist) - the set is not
  *         changed
  */
-int set_remove(struct Set *s, int x);
+int set_remove(struct Set *set, int item);
 
 /**
  * @brief Get the number of elements from a set
@@ -56,7 +57,7 @@ int set_remove(struct Set *s, int x);
  *
  * @return The number of elements of the set s
  */
-int set_cardinal(const struct Set *x);
+int set_cardinal(struct Set *set);
 
 
 /**
@@ -67,7 +68,7 @@ int set_cardinal(const struct Set *x);
  * 
  * @return 1 if the element exists, 0 otherwise
  */
-int set_find(const struct Set *s, int x);
+int set_find(struct Set *set, int item);
 
 
 /**
@@ -78,7 +79,7 @@ int set_find(const struct Set *s, int x);
  * 
  * @return 1 if the sets are equal, 0 otherwise
  */
-int set_equals(const struct Set *a, const struct Set *b);
+int set_equals(struct Set *set_1, struct Set *set_2);
 
 /**
  * @brief Perform the intersection of 2 sets
@@ -88,7 +89,7 @@ int set_equals(const struct Set *a, const struct Set *b);
  * 
  * @return The intersection of a and b
  */
-struct Set* set_intersection(const struct Set *a, const struct Set *b);
+struct Set* set_intersection(struct Set *set_1, struct Set *set_2);
 
 /**
  * @brief Perform the union of 2 sets
@@ -98,7 +99,7 @@ struct Set* set_intersection(const struct Set *a, const struct Set *b);
  * 
  * @return The union of a and b
  */
-struct Set* set_union(const struct Set *a, const struct Set *b);
+struct Set* set_union(struct Set *set_1, struct Set *set_2);
 
 /**
  * @brief Perform the difference of 2 sets
@@ -108,7 +109,7 @@ struct Set* set_union(const struct Set *a, const struct Set *b);
  * 
  * @return The difference of a and b
  */
-struct Set* set_difference(const struct Set *a, const struct Set *b);
+struct Set* set_difference(struct Set *set_1, struct Set *set_2);
 
 #endif
 

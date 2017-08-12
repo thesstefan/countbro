@@ -65,7 +65,7 @@ int vector_get(struct Vector *vector, int index);
  *
  * @return none
  */
-void vector_delete(struct Vector *vector, int index);
+void vector_remove(struct Vector *vector, int index);
 
 /**
  * @brief Delete a vector
