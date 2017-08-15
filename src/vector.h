@@ -16,25 +16,16 @@ struct Vector {
  */
 struct Vector *vector_create();
 
-/** 
- * @brief Resize the vector
- *
- * @param vector   The vector to reallocate
- * @param capacity The capacity of the reallocated vector
- *
- * @return none
- */
-void vector_resize(struct Vector *vector, int capacity);
-
 /**
  * @brief Add an element to the vector
  *
  * @param vector The vector to add to
  * @param item   The item to add
  *
- * @return none  
+ * @return 1 on success
+ *         0 on failure (e.g. failed memory reallocation in vector_resize())  
  */  
-void vector_add(struct Vector *vector, int item);
+int vector_add(struct Vector *vector, int item);
 
 /**
  * @brief Set the value of an element, given the index
@@ -63,9 +54,11 @@ int vector_get(struct Vector *vector, int index);
  * @param vector The vector which contains the element to be deleted
  * @param index  The index of the element to be deleted
  *
- * @return none
+ * @return 1 on success
+ *         0 on failure (e.g. failed memory reallocation in vector_resize()
+                         or  when the element to be deleted does not exist)
  */
-void vector_remove(struct Vector *vector, int index);
+int vector_remove(struct Vector *vector, int index);
 
 /**
  * @brief Delete a vector

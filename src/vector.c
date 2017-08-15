@@ -13,7 +13,7 @@ struct Vector *vector_create() {
     return new_vector;
 }
 
-void vector_resize(struct Vector *vector, int capacity) {
+int vector_resize(struct Vector *vector, int capacity) {
 
 #ifdef DEBUG_ON
     printf("Vector resize : %d to %d\n", vector->capacity, capacity);
@@ -24,12 +24,16 @@ void vector_resize(struct Vector *vector, int capacity) {
     if (items != NULL) {
         vector->items = items;
         vector->capacity = capacity;
-    }
+
+        return 1;
+    } else
+        return 0;
 }
 
-void vector_add(struct Vector *vector, int item) {
+int vector_add(struct Vector *vector, int item) {
     if (vector->capacity == vector->size)
-        vector_resize(vector, vector->capacity * 2);
+        if (vector_resize(vector, vector->capacity * 2) != 1)
+            return 0;
 
     vector->items[vector->size] = item;
 
@@ -38,6 +42,8 @@ void vector_add(struct Vector *vector, int item) {
 #endif
 
     vector->size += 1;
+
+    return 1;
 }
 
 void vector_set(struct Vector *vector, int index, int item) {
@@ -61,7 +67,7 @@ int vector_get(struct Vector *vector, int index) {
     }
 }
 
-void vector_remove(struct Vector *vector, int index) {
+int vector_remove(struct Vector *vector, int index) {
     if (index >= 0 && index < vector->size) {
         for (int shift_index = index; shift_index < vector->size - 1; shift_index++)
             vector->items[shift_index] = vector->items[shift_index + 1];
@@ -70,13 +76,18 @@ void vector_remove(struct Vector *vector, int index) {
         vector->size--;
 
         if (vector->size > 0 && vector->size == vector->capacity / 4)
-            vector_resize(vector, vector->capacity / 2);
+            if (vector_resize(vector, vector->capacity / 2) != 1)
+                return 0;
 
         #ifdef DEBUG_ON
             printf("Deleted the element at index %d\n", index);
         #endif
+
+        return 1;
     } else {
         fprintf(stderr, "vector_remove() ERROR : Element %d does not exist\n", index);
+
+        return 0;
     }
 }
 
