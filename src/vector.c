@@ -14,11 +14,6 @@ struct Vector *vector_create() {
 }
 
 int vector_resize(struct Vector *vector, int capacity) {
-
-#ifdef DEBUG_ON
-    printf("Vector resize : %d to %d\n", vector->capacity, capacity);
-#endif
-
     int *items = realloc(vector->items, sizeof(int) * capacity);
 
     if (items != NULL) {
@@ -37,10 +32,6 @@ int vector_add(struct Vector *vector, int item) {
 
     vector->items[vector->size] = item;
 
-#ifdef DEBUG_ON
-    printf("Added %d at index %d\n", item, vector->size);
-#endif
-
     vector->size += 1;
 
     return 1;
@@ -49,10 +40,6 @@ int vector_add(struct Vector *vector, int item) {
 void vector_set(struct Vector *vector, int index, int item) {
     if (index >= 0 && index < vector->size) {
         vector->items[index] = item; 
-
-#ifdef DEBUG_ON
-        printf("Element at index %d was set with the value %d", index, item);
-#endif 
     } else  
        fprintf(stderr, "vector_set() ERROR : Element %d does not exist", index);
 }
@@ -79,10 +66,6 @@ int vector_remove(struct Vector *vector, int index) {
             if (vector_resize(vector, vector->capacity / 2) != 1)
                 return 0;
 
-        #ifdef DEBUG_ON
-            printf("Deleted the element at index %d\n", index);
-        #endif
-
         return 1;
     } else {
         fprintf(stderr, "vector_remove() ERROR : Element %d does not exist\n", index);
@@ -94,8 +77,4 @@ int vector_remove(struct Vector *vector, int index) {
 void vector_free(struct Vector *vector) {
     free(vector->items);
     free(vector);
-
-    #ifdef DEBUG_ON
-        printf("The vector was deleted\n");
-    #endif
 }
