@@ -16,13 +16,13 @@ struct Vector *vector_create() {
 int vector_resize(struct Vector *vector, int capacity) {
     int *items = realloc(vector->items, sizeof(int) * capacity);
 
-    if (items != NULL) {
-        vector->items = items;
-        vector->capacity = capacity;
-
-        return 1;
-    } else
+    if (items == NULL)
         return 0;
+
+    vector->items = items;
+    vector->capacity = capacity;
+
+    return 1;
 }
 
 int vector_add(struct Vector *vector, int item) {
@@ -31,41 +31,42 @@ int vector_add(struct Vector *vector, int item) {
             return 0;
 
     vector->items[vector->size] = item;
-
     vector->size += 1;
 
     return 1;
 }
 
-void vector_set(struct Vector *vector, int index, int item) {
-    if (index >= 0 && index < vector->size) {
-        vector->items[index] = item; 
+int vector_set(struct Vector *vector, int index, int item) {
+    if (index < 0 || index >= vector->size)
+        return 0;
+
+    vector->items[index] = item; 
+
+    return 1;
 }
 
 int vector_get(struct Vector *vector, int index) {
-    if (index >= 0 && index < vector->size)
-        return vector->items[index];
-    else {
+    if (index < 0 || index >= vector->size)
         return -1;
-    }
+
+    return vector->items[index];
 }
 
 int vector_remove(struct Vector *vector, int index) {
-    if (index >= 0 && index < vector->size) {
-        for (int shift_index = index; shift_index < vector->size - 1; shift_index++)
-            vector->items[shift_index] = vector->items[shift_index + 1];
-
-        vector->items[vector->size - 1] = -1;
-        vector->size--;
-
-        if (vector->size > 0 && vector->size == vector->capacity / 4)
-            if (vector_resize(vector, vector->capacity / 2) != 1)
-                return 0;
-
-        return 1;
-    } else {
+    if (index < 0 || index >= vector->size)
         return 0;
-    }
+
+    for (int shift_index = index; shift_index < vector->size - 1; shift_index++)
+        vector->items[shift_index] = vector->items[shift_index + 1];
+
+    vector->items[vector->size - 1] = -1;
+    vector->size--;
+
+    if (vector->size > 0 && vector->size == vector->capacity / 4)
+        if (vector_resize(vector, vector->capacity / 2) != 1)
+             return 0;
+
+    return 1;
 }
 
 void vector_free(struct Vector *vector) {
