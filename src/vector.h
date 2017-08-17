@@ -1,5 +1,8 @@
 // @file This module provides a basic int vector data type implementation
 
+/**
+ * @brief Macro used for the inital capacity of a vector
+ */
 #define VECTOR_INIT_CAPACITY 4
 
 struct Vector {
@@ -12,7 +15,8 @@ struct Vector {
 /**
  * @brief Create a new vector
  *
- * @return The new vector
+ * @return Pointer to the new vector on success
+ *         NULL on failure (e.g. failed malloc())
  */
 struct Vector *vector_create();
 
@@ -34,9 +38,10 @@ int vector_add(struct Vector *vector, int item);
  * @param index  The index of the element
  * @param item   The value to be set
  *
- * @return none
+ * @return 1 on success
+ *         0 on failure (e.g. element index is out of bounds)
  */
-void vector_set(struct Vector *vector, int index, int item);
+int vector_set(struct Vector *vector, int index, int item);
 
 /**
  * @brief Get the value of an element, given the index
@@ -44,7 +49,8 @@ void vector_set(struct Vector *vector, int index, int item);
  * @param vector The vector which contains the element
  * @param index  The index of the element
  *
- * @return The value of the element
+ * @return The value of the element on success
+ *         -1 on failure (e.g. element index is out of bounds)
  */
 int vector_get(struct Vector *vector, int index);
 
