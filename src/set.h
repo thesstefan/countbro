@@ -3,7 +3,9 @@
 #ifndef SET_H
 #define SET_H
 
-
+/**
+ * @brief Representation of a set
+ */
 struct Set {
     // add internal representation of a set
     struct Vector *representation;
@@ -12,14 +14,15 @@ struct Set {
 /**
  * @brief Create a new set
  * 
- * @return The new set.
+ * @return Pointer to the new set on success
+ *         NULL on failure (e.g. vector_create() failure)
  */
 struct Set* set_create();
 
 /**
  * @brief Delete a set
  * 
- * @param s The set to delete
+ * @param set The set to delete
  * 
  * @return none
  */
@@ -29,8 +32,8 @@ void set_delete(struct Set *set);
 /**
  * @brief Add an element to a set
  * 
- * @param s The set to add to
- * @param x The element to add
+ * @param set The set to add to
+ * @param item The element to add
  * 
  * @return 1 on success,
  *         0 on failure (e.g. the element already exists) - the set is not
@@ -41,8 +44,8 @@ int set_add(struct Set *set, int item);
 /**
  * @brief Remove an element from the set
  * 
- * @param s The set to remove from
- * @param x The element to remove
+ * @param set The set to remove from
+ * @param item The element to remove
  * 
  * @return 1 on success,
  *         0 on failure (e.g. the element does not exist) - the set is not
@@ -53,9 +56,9 @@ int set_remove(struct Set *set, int item);
 /**
  * @brief Get the number of elements from a set
  * 
- * @param s The set
+ * @param set The set
  *
- * @return The number of elements of the set s
+ * @return The number of elements of the set set
  */
 int set_cardinal(struct Set *set);
 
@@ -63,8 +66,8 @@ int set_cardinal(struct Set *set);
 /**
  * @brief Check if an element exists in a set
  * 
- * @param s The set to search in
- * @param x The element to look for
+ * @param set The set to search in
+ * @param item The element to look for
  * 
  * @return 1 if the element exists, 0 otherwise
  */
@@ -79,7 +82,7 @@ int set_find(struct Set *set, int item);
  * 
  * @return 1 if the sets are equal, 0 otherwise
  */
-int set_equals(struct Set *set_1, struct Set *set_2);
+int set_equals(struct Set *a, struct Set *b);
 
 /**
  * @brief Perform the intersection of 2 sets
@@ -89,7 +92,7 @@ int set_equals(struct Set *set_1, struct Set *set_2);
  * 
  * @return The intersection of a and b
  */
-struct Set* set_intersection(struct Set *set_1, struct Set *set_2);
+struct Set* set_intersection(struct Set *a, struct Set *b);
 
 /**
  * @brief Perform the union of 2 sets
@@ -99,7 +102,7 @@ struct Set* set_intersection(struct Set *set_1, struct Set *set_2);
  * 
  * @return The union of a and b
  */
-struct Set* set_union(struct Set *set_1, struct Set *set_2);
+struct Set* set_union(struct Set *a, struct Set *b);
 
 /**
  * @brief Perform the difference of 2 sets
@@ -109,7 +112,7 @@ struct Set* set_union(struct Set *set_1, struct Set *set_2);
  * 
  * @return The difference of a and b
  */
-struct Set* set_difference(struct Set *set_1, struct Set *set_2);
+struct Set* set_difference(struct Set *a, struct Set *b);
 
 #endif
 
