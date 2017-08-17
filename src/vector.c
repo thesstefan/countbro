@@ -40,16 +40,12 @@ int vector_add(struct Vector *vector, int item) {
 void vector_set(struct Vector *vector, int index, int item) {
     if (index >= 0 && index < vector->size) {
         vector->items[index] = item; 
-    } else  
-       fprintf(stderr, "vector_set() ERROR : Element %d does not exist", index);
 }
 
 int vector_get(struct Vector *vector, int index) {
     if (index >= 0 && index < vector->size)
         return vector->items[index];
     else {
-        fprintf(stderr, "vector_get() ERROR : Element %d does not exist", index);
-
         return -1;
     }
 }
@@ -68,8 +64,6 @@ int vector_remove(struct Vector *vector, int index) {
 
         return 1;
     } else {
-        fprintf(stderr, "vector_remove() ERROR : Element %d does not exist\n", index);
-
         return 0;
     }
 }
