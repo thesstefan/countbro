@@ -39,7 +39,13 @@ losing your uncommited changes.
 to retrieve the original copy - it is a permanent undo. Care must be taken when using
 this tool, as it's one of the only Git commands that has the potential to lose your
 work. On the commit-level, resetting is a way to move the tip of a branch to a 
-different commit. This can be used to remove commits from the current branch.
+different commit. This can be used to remove commits from the current branch. Also, 
+after we run "git reset", our working directory will be behing the repository.
+When we want to push the change we will not be allowed because we need to have the
+repository and the working directory synchronized. So, for the changes to take place
+we need to use "push -f" or "push --force". Usually, forcing a push is not a good idea,
+mainly because we remove history from the project, which can create big problems in shared
+repositories. The lose of data in working directory can also be a problem.
     If you made some mistake and you haven't pushed the changes to remote repository,
 you can use tools such as "git commit --amend", "git revert" and others. But once 
 you've pushed your changes, you cannot change your git history without force-pushing.
