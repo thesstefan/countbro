@@ -26,9 +26,10 @@ int vector_resize(struct Vector *vector, int capacity) {
 }
 
 int vector_add(struct Vector *vector, int item) {
-    if (vector->capacity == vector->size)
+    if (vector->capacity == vector->size) {
         if (vector_resize(vector, vector->capacity * 2) != 1)
             return 0;
+    }
 
     vector->items[vector->size] = item;
     vector->size += 1;

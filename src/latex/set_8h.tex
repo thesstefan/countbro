@@ -1,0 +1,225 @@
+\hypertarget{set_8h}{}\section{set.\+h File Reference}
+\label{set_8h}\index{set.\+h@{set.\+h}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSet}{Set}
+\begin{DoxyCompactList}\small\item\em Representation of a set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structSet}{Set} $\ast$ \hyperlink{set_8h_a059bd29a5eb5c5a8166332f1a21010cb}{set\+\_\+create} ()
+\begin{DoxyCompactList}\small\item\em Create a new set. \end{DoxyCompactList}\item 
+void \hyperlink{set_8h_a2dfb466f173409b8d084e671bc754e37}{set\+\_\+delete} (struct \hyperlink{structSet}{Set} $\ast$set)
+\begin{DoxyCompactList}\small\item\em Delete a set. \end{DoxyCompactList}\item 
+int \hyperlink{set_8h_a06083369e11f3e5c68e545f8c23abc21}{set\+\_\+add} (struct \hyperlink{structSet}{Set} $\ast$set, int item)
+\begin{DoxyCompactList}\small\item\em Add an element to a set. \end{DoxyCompactList}\item 
+int \hyperlink{set_8h_ab3f930c360ee9b154a96bf17461ff24b}{set\+\_\+remove} (struct \hyperlink{structSet}{Set} $\ast$set, int item)
+\begin{DoxyCompactList}\small\item\em Remove an element from the set. \end{DoxyCompactList}\item 
+int \hyperlink{set_8h_a0d843676f52aeb639165fc580b4a9dd7}{set\+\_\+cardinal} (struct \hyperlink{structSet}{Set} $\ast$set)
+\begin{DoxyCompactList}\small\item\em Get the number of elements from a set. \end{DoxyCompactList}\item 
+int \hyperlink{set_8h_a163234fe05e484d3609b496a12a819f5}{set\+\_\+find} (struct \hyperlink{structSet}{Set} $\ast$set, int item)
+\begin{DoxyCompactList}\small\item\em Check if an element exists in a set. \end{DoxyCompactList}\item 
+int \hyperlink{set_8h_a63745d2016d85d34edcb9a185a0ef6ff}{set\+\_\+equals} (struct \hyperlink{structSet}{Set} $\ast$a, struct \hyperlink{structSet}{Set} $\ast$b)
+\begin{DoxyCompactList}\small\item\em Check if 2 sets are equal. \end{DoxyCompactList}\item 
+struct \hyperlink{structSet}{Set} $\ast$ \hyperlink{set_8h_ac1b8a7623e10a5d17e155749a4ddddeb}{set\+\_\+intersection} (struct \hyperlink{structSet}{Set} $\ast$a, struct \hyperlink{structSet}{Set} $\ast$b)
+\begin{DoxyCompactList}\small\item\em Perform the intersection of 2 sets. \end{DoxyCompactList}\item 
+struct \hyperlink{structSet}{Set} $\ast$ \hyperlink{set_8h_a1a9e36668e2925a5ffd2bd0d1a636869}{set\+\_\+union} (struct \hyperlink{structSet}{Set} $\ast$a, struct \hyperlink{structSet}{Set} $\ast$b)
+\begin{DoxyCompactList}\small\item\em Perform the union of 2 sets. \end{DoxyCompactList}\item 
+struct \hyperlink{structSet}{Set} $\ast$ \hyperlink{set_8h_ab4f081037a22fe36af29bbe5302dc9eb}{set\+\_\+difference} (struct \hyperlink{structSet}{Set} $\ast$a, struct \hyperlink{structSet}{Set} $\ast$b)
+\begin{DoxyCompactList}\small\item\em Perform the difference of 2 sets. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This module provides a basic int set data type implementation 
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{set_8h_a06083369e11f3e5c68e545f8c23abc21}\label{set_8h_a06083369e11f3e5c68e545f8c23abc21}} 
+\index{set.\+h@{set.\+h}!set\+\_\+add@{set\+\_\+add}}
+\index{set\+\_\+add@{set\+\_\+add}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+add()}{set\_add()}}
+{\footnotesize\ttfamily int set\+\_\+add (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{set,  }\item[{int}]{item }\end{DoxyParamCaption})}
+
+
+
+Add an element to a set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to add to \\
+\hline
+{\em item} & The element to add\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 on success, 0 on failure (e.\+g. the element already exists) -\/ the set is not changed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_a0d843676f52aeb639165fc580b4a9dd7}\label{set_8h_a0d843676f52aeb639165fc580b4a9dd7}} 
+\index{set.\+h@{set.\+h}!set\+\_\+cardinal@{set\+\_\+cardinal}}
+\index{set\+\_\+cardinal@{set\+\_\+cardinal}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+cardinal()}{set\_cardinal()}}
+{\footnotesize\ttfamily int set\+\_\+cardinal (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{set }\end{DoxyParamCaption})}
+
+
+
+Get the number of elements from a set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of elements of the set set 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_a059bd29a5eb5c5a8166332f1a21010cb}\label{set_8h_a059bd29a5eb5c5a8166332f1a21010cb}} 
+\index{set.\+h@{set.\+h}!set\+\_\+create@{set\+\_\+create}}
+\index{set\+\_\+create@{set\+\_\+create}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+create()}{set\_create()}}
+{\footnotesize\ttfamily struct \hyperlink{structSet}{Set}$\ast$ set\+\_\+create (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Create a new set. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the new set on success N\+U\+LL on failure (e.\+g. vector\+\_\+create() failure) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_a2dfb466f173409b8d084e671bc754e37}\label{set_8h_a2dfb466f173409b8d084e671bc754e37}} 
+\index{set.\+h@{set.\+h}!set\+\_\+delete@{set\+\_\+delete}}
+\index{set\+\_\+delete@{set\+\_\+delete}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+delete()}{set\_delete()}}
+{\footnotesize\ttfamily void set\+\_\+delete (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{set }\end{DoxyParamCaption})}
+
+
+
+Delete a set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to delete\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_ab4f081037a22fe36af29bbe5302dc9eb}\label{set_8h_ab4f081037a22fe36af29bbe5302dc9eb}} 
+\index{set.\+h@{set.\+h}!set\+\_\+difference@{set\+\_\+difference}}
+\index{set\+\_\+difference@{set\+\_\+difference}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+difference()}{set\_difference()}}
+{\footnotesize\ttfamily struct \hyperlink{structSet}{Set}$\ast$ set\+\_\+difference (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{a,  }\item[{struct \hyperlink{structSet}{Set} $\ast$}]{b }\end{DoxyParamCaption})}
+
+
+
+Perform the difference of 2 sets. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \\
+\hline
+{\em b} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The difference of a and b 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_a63745d2016d85d34edcb9a185a0ef6ff}\label{set_8h_a63745d2016d85d34edcb9a185a0ef6ff}} 
+\index{set.\+h@{set.\+h}!set\+\_\+equals@{set\+\_\+equals}}
+\index{set\+\_\+equals@{set\+\_\+equals}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+equals()}{set\_equals()}}
+{\footnotesize\ttfamily int set\+\_\+equals (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{a,  }\item[{struct \hyperlink{structSet}{Set} $\ast$}]{b }\end{DoxyParamCaption})}
+
+
+
+Check if 2 sets are equal. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \\
+\hline
+{\em b} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the sets are equal, 0 otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_a163234fe05e484d3609b496a12a819f5}\label{set_8h_a163234fe05e484d3609b496a12a819f5}} 
+\index{set.\+h@{set.\+h}!set\+\_\+find@{set\+\_\+find}}
+\index{set\+\_\+find@{set\+\_\+find}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+find()}{set\_find()}}
+{\footnotesize\ttfamily int set\+\_\+find (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{set,  }\item[{int}]{item }\end{DoxyParamCaption})}
+
+
+
+Check if an element exists in a set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to search in \\
+\hline
+{\em item} & The element to look for\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 if the element exists, 0 otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_ac1b8a7623e10a5d17e155749a4ddddeb}\label{set_8h_ac1b8a7623e10a5d17e155749a4ddddeb}} 
+\index{set.\+h@{set.\+h}!set\+\_\+intersection@{set\+\_\+intersection}}
+\index{set\+\_\+intersection@{set\+\_\+intersection}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+intersection()}{set\_intersection()}}
+{\footnotesize\ttfamily struct \hyperlink{structSet}{Set}$\ast$ set\+\_\+intersection (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{a,  }\item[{struct \hyperlink{structSet}{Set} $\ast$}]{b }\end{DoxyParamCaption})}
+
+
+
+Perform the intersection of 2 sets. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \\
+\hline
+{\em b} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The intersection of a and b 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_ab3f930c360ee9b154a96bf17461ff24b}\label{set_8h_ab3f930c360ee9b154a96bf17461ff24b}} 
+\index{set.\+h@{set.\+h}!set\+\_\+remove@{set\+\_\+remove}}
+\index{set\+\_\+remove@{set\+\_\+remove}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+remove()}{set\_remove()}}
+{\footnotesize\ttfamily int set\+\_\+remove (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{set,  }\item[{int}]{item }\end{DoxyParamCaption})}
+
+
+
+Remove an element from the set. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em set} & The set to remove from \\
+\hline
+{\em item} & The element to remove\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+1 on success, 0 on failure (e.\+g. the element does not exist) -\/ the set is not changed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{set_8h_a1a9e36668e2925a5ffd2bd0d1a636869}\label{set_8h_a1a9e36668e2925a5ffd2bd0d1a636869}} 
+\index{set.\+h@{set.\+h}!set\+\_\+union@{set\+\_\+union}}
+\index{set\+\_\+union@{set\+\_\+union}!set.\+h@{set.\+h}}
+\subsubsection{\texorpdfstring{set\+\_\+union()}{set\_union()}}
+{\footnotesize\ttfamily struct \hyperlink{structSet}{Set}$\ast$ set\+\_\+union (\begin{DoxyParamCaption}\item[{struct \hyperlink{structSet}{Set} $\ast$}]{a,  }\item[{struct \hyperlink{structSet}{Set} $\ast$}]{b }\end{DoxyParamCaption})}
+
+
+
+Perform the union of 2 sets. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & \\
+\hline
+{\em b} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The union of a and b 
+\end{DoxyReturn}

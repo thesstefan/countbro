@@ -1,4 +1,8 @@
-// @file This module provides a basic int vector data type implementation
+/*
+ * @file vector.h 
+ *
+ * This module provides a basic int vector data type implementation
+ */
 
 /**
  * @brief Macro used for the inital capacity of a vector

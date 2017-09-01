@@ -1,10 +1,11 @@
 CC = gcc
 CFLAGS = -Wall -std=c99
-SOURCE := $(wildcard src/*.c)
-OBJ := $(addprefix build/, $(notdir $(SOURCE:.c=.o)))
 
-TEST_SOURCE := $(wildcard testing/*.c)
-TEST_OBJ := $(addprefix test/, $(notdir $(TEST_SOURCE:.c=.o)))
+TEST_SOURCE = src/test.c
+TEST_OBJ := $(addprefix build/test/, $(notdir $(TEST_SOURCE:.c=.o)))
+
+SOURCE := $(filter-out $(TEST_SOURCE), $(wildcard src/*.c))
+OBJ := $(addprefix build/, $(notdir $(SOURCE:.c=.o)))
 
 HEADERS = $(wildcard src/*.h)
 
@@ -14,17 +15,17 @@ all: $(OBJ) build
 build/%.o: src/%.c
 	$(CC) $(C_FLAGS) -c -o $@ $<
 
-test: $(TEST_OBJ) test_build
-	$(CC) $(C_FLAGS) -o tested $(TEST_OBJ)
+test: $(TEST_OBJ) 
+	$(CC) $(C_FLAGS) -o tested $(TEST_OBJ) $(OBJ)
 
-test/%.o: testing/%.c
-	$(CC) $(C_FLAGS) -c -o $@ $<
+build/test/%.o: $(TEST_SOURCE)
+	$(CC) $(C_FLAGS) $(OBJ) -c $< -o $@ 
 
-test_build:
-	mkdir test_build
+test_build: build
+	mkdir build/test
 
 test_clean:
-	rm -rf test_build
+	rm -rf build_test
 
 clean:
 	rm -rf build

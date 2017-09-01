@@ -2,6 +2,7 @@
 
 #include "set.h"
 #include "vector.h"
+#include <stdio.h>
 
 struct Set *set_create() {
     struct Set *new_set = malloc(sizeof(struct Set));
@@ -18,6 +19,9 @@ void set_delete(struct Set *set) {
 }
 
 int set_find(struct Set *set, int item) {
+    if (set_cardinal(set) == 0)
+        return 0;
+
     for (int index = 0; index < set->representation->size; index++)
         if (item == vector_get(set->representation, index))
             return 1;
@@ -44,6 +48,8 @@ int set_remove(struct Set *set, int item) {
 
             return 1;
         }
+    
+    return 0;
 }
 
 int set_cardinal(struct Set *set) {

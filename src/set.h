@@ -1,4 +1,8 @@
-// @file This module provides a basic int set data type implementation
+/**
+ * @file set.h
+ *
+ * This module provides a basic int set data type implementation
+ */
 
 #ifndef SET_H
 #define SET_H

@@ -24,9 +24,7 @@ struct Labels_list *init_label_list(struct binary_image *image) {
 }
 
 struct Set *get_neighbors(struct Labels_list *labels, int y, int x) {
-    // We use 3 beacuse we use 8-Connectivity
-    // For 8-Connectivity we evaluate only the N, NV, and V pixels
-    struct Set *neighbors = malloc(sizeof(struct Set));
+    struct Set *neighbors = set_create();
 
     if (x - 1 >= 0)
         set_add(neighbors, *(labels->matrix + labels->width * y + (x - 1)));
@@ -50,7 +48,7 @@ int min(struct Set *neighbors) {
             if (set_find(neighbors, index))
                 return index;
 
-    return -1;
+    return 0;
 }
 
 struct Labels_list *first_pass(struct binary_image *image, struct Set *set_list[MAX_SETS]) {

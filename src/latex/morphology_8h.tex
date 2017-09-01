@@ -1,0 +1,200 @@
+\hypertarget{morphology_8h}{}\section{morphology.\+h File Reference}
+\label{morphology_8h}\index{morphology.\+h@{morphology.\+h}}
+{\ttfamily \#include \char`\"{}transform.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}colors.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}image.\+h\char`\"{}}\newline
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structKernel}{Kernel}
+\begin{DoxyCompactList}\small\item\em Representation of the kernel/structuring element used in morphological operations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66db}{kernel\+\_\+state} \{ \hyperlink{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbacbc53dc5e2103ec019d3b45ac0276d78}{F\+IT}, 
+\hyperlink{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbad4cf8619fedf804702c72835be555da0}{H\+IT}, 
+\hyperlink{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbac72cb4ba9e379a25e80f157177dbe2b8}{O\+UT}
+ \}\begin{DoxyCompactList}\small\item\em Enum type which stores the state of the kernel in relation with the image. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structKernel}{Kernel} $\ast$ \hyperlink{morphology_8h_a83157245e99b92558b49d19f6552e025}{square\+\_\+kernel} (int size)
+\begin{DoxyCompactList}\small\item\em Create a new square kernel with a given size. \end{DoxyCompactList}\item 
+void \hyperlink{morphology_8h_af7614d52357f49321c05feb9b84a54bc}{delete\+\_\+kernel} (struct \hyperlink{structKernel}{Kernel} $\ast$kernel)
+\begin{DoxyCompactList}\small\item\em Delete a kernel. \end{DoxyCompactList}\item 
+void \hyperlink{morphology_8h_a04ce4eef37da7efe31aa2616b199f9c6}{erosion} (struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$image, struct \hyperlink{structKernel}{Kernel} $\ast$kernel)
+\begin{DoxyCompactList}\small\item\em The implementation of erosion, fundamental morphological operation. \end{DoxyCompactList}\item 
+void \hyperlink{morphology_8h_aba1a670c18948bf6dbac725d09a95846}{dilation} (struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$image, struct \hyperlink{structKernel}{Kernel} $\ast$kernel)
+\begin{DoxyCompactList}\small\item\em The implementation of erosion, fundamental morphological operation. \end{DoxyCompactList}\item 
+void \hyperlink{morphology_8h_ae1906244d579ce26dfaf35c359f08354}{opening} (struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$image, struct \hyperlink{structKernel}{Kernel} $\ast$kernel)
+\begin{DoxyCompactList}\small\item\em The implementation of opening, compound morphological operation. \end{DoxyCompactList}\item 
+void \hyperlink{morphology_8h_a4b2370e735cae761b863dae5f73926d0}{closing} (struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$image, struct \hyperlink{structKernel}{Kernel} $\ast$kernel)
+\begin{DoxyCompactList}\small\item\em The implementation of closing, compound morphological operation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This module provides the implementation of the basic morphological operations 
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66db}\label{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66db}} 
+\index{morphology.\+h@{morphology.\+h}!kernel\+\_\+state@{kernel\+\_\+state}}
+\index{kernel\+\_\+state@{kernel\+\_\+state}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{kernel\+\_\+state}{kernel\_state}}
+{\footnotesize\ttfamily enum \hyperlink{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66db}{kernel\+\_\+state}}
+
+
+
+Enum type which stores the state of the kernel in relation with the image. 
+
+When a structuring element is placed in a binary image, each of its pixels is associated with the correspoinding pixel of the neighourhood under the structuring element.
+
+The structuring element is said to F\+IT the image if, for each of its pixels set to 1, the corresponding image pixel is also 1.
+
+Similarly, a structuring element is said to H\+IT, or intersect, an image if, at least for one of its pixels set to 1 the corresponding image pixel is also 1.
+
+A structuring element is said to be O\+UT the image if, none of its piels mach the corresponding image pixels. \begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{F\+IT@{F\+IT}!morphology.\+h@{morphology.\+h}}\index{morphology.\+h@{morphology.\+h}!F\+IT@{F\+IT}}}\mbox{\Hypertarget{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbacbc53dc5e2103ec019d3b45ac0276d78}\label{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbacbc53dc5e2103ec019d3b45ac0276d78}} 
+F\+IT&The kernel fits the image \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{H\+IT@{H\+IT}!morphology.\+h@{morphology.\+h}}\index{morphology.\+h@{morphology.\+h}!H\+IT@{H\+IT}}}\mbox{\Hypertarget{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbad4cf8619fedf804702c72835be555da0}\label{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbad4cf8619fedf804702c72835be555da0}} 
+H\+IT&The kernel hits the image \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{O\+UT@{O\+UT}!morphology.\+h@{morphology.\+h}}\index{morphology.\+h@{morphology.\+h}!O\+UT@{O\+UT}}}\mbox{\Hypertarget{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbac72cb4ba9e379a25e80f157177dbe2b8}\label{morphology_8h_a2213bcc3e094bc12c0ed3896c1ff66dbac72cb4ba9e379a25e80f157177dbe2b8}} 
+O\+UT&The kernel is out of the image \\
+\hline
+
+\end{DoxyEnumFields}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{morphology_8h_a4b2370e735cae761b863dae5f73926d0}\label{morphology_8h_a4b2370e735cae761b863dae5f73926d0}} 
+\index{morphology.\+h@{morphology.\+h}!closing@{closing}}
+\index{closing@{closing}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{closing()}{closing()}}
+{\footnotesize\ttfamily void closing (\begin{DoxyParamCaption}\item[{struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$}]{image,  }\item[{struct \hyperlink{structKernel}{Kernel} $\ast$}]{kernel }\end{DoxyParamCaption})}
+
+
+
+The implementation of closing, compound morphological operation. 
+
+The closing of an image F by a structuring element S is a dilation followed by an erosion
+
+Closing is so called because it can fill holes in the regions while keeping the initial region sizes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em image} & The binary image to which we apply the closing\\
+\hline
+{\em kernel} & The structuring element used to apply the closing \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{morphology_8h_af7614d52357f49321c05feb9b84a54bc}\label{morphology_8h_af7614d52357f49321c05feb9b84a54bc}} 
+\index{morphology.\+h@{morphology.\+h}!delete\+\_\+kernel@{delete\+\_\+kernel}}
+\index{delete\+\_\+kernel@{delete\+\_\+kernel}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{delete\+\_\+kernel()}{delete\_kernel()}}
+{\footnotesize\ttfamily void delete\+\_\+kernel (\begin{DoxyParamCaption}\item[{struct \hyperlink{structKernel}{Kernel} $\ast$}]{kernel }\end{DoxyParamCaption})}
+
+
+
+Delete a kernel. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kernel} & The kernel to be deleted\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\mbox{\Hypertarget{morphology_8h_aba1a670c18948bf6dbac725d09a95846}\label{morphology_8h_aba1a670c18948bf6dbac725d09a95846}} 
+\index{morphology.\+h@{morphology.\+h}!dilation@{dilation}}
+\index{dilation@{dilation}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{dilation()}{dilation()}}
+{\footnotesize\ttfamily void dilation (\begin{DoxyParamCaption}\item[{struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$}]{image,  }\item[{struct \hyperlink{structKernel}{Kernel} $\ast$}]{kernel }\end{DoxyParamCaption})}
+
+
+
+The implementation of erosion, fundamental morphological operation. 
+
+The dilation of a binary image F by a structuring element S produces a new binary image G with ones in all locations of a structuring element\textquotesingle{}s origin at which that structuring element S hits the input image F, i.\+e. g(x,y) = 1 if S hits F and 0 otherwise, repeating for all pixel coordinates (x,y).
+
+Dilation has the opposite effect to erosion -- it adds a layer of pixels to both the inner and outer boundaries of regions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em image} & The binary image to which we apply the dilation\\
+\hline
+{\em kernel} & The structuring element used to apply the dilation\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\mbox{\Hypertarget{morphology_8h_a04ce4eef37da7efe31aa2616b199f9c6}\label{morphology_8h_a04ce4eef37da7efe31aa2616b199f9c6}} 
+\index{morphology.\+h@{morphology.\+h}!erosion@{erosion}}
+\index{erosion@{erosion}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{erosion()}{erosion()}}
+{\footnotesize\ttfamily void erosion (\begin{DoxyParamCaption}\item[{struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$}]{image,  }\item[{struct \hyperlink{structKernel}{Kernel} $\ast$}]{kernel }\end{DoxyParamCaption})}
+
+
+
+The implementation of erosion, fundamental morphological operation. 
+
+The erosion of a binary image I by a structuring element S produces a new binary image G with ones in all locations (x,y) of a structuring element\textquotesingle{}s origin at which that structuring elemet S fits the input image F, i.\+e. g(x,y) = 1 if S fits F and 0 otherwise, repeating for all pixel coordinates (x,y).
+
+Erosion removes small-\/scale details from a binary image but simultaneously reduces the size of regions of interest
+
+
+\begin{DoxyParams}{Parameters}
+{\em image} & The binary image to which we apply the erosion\\
+\hline
+{\em kernel} & The structuring element used to apply the erosion\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+none 
+\end{DoxyReturn}
+\mbox{\Hypertarget{morphology_8h_ae1906244d579ce26dfaf35c359f08354}\label{morphology_8h_ae1906244d579ce26dfaf35c359f08354}} 
+\index{morphology.\+h@{morphology.\+h}!opening@{opening}}
+\index{opening@{opening}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{opening()}{opening()}}
+{\footnotesize\ttfamily void opening (\begin{DoxyParamCaption}\item[{struct \hyperlink{structbinary__image}{binary\+\_\+image} $\ast$}]{image,  }\item[{struct \hyperlink{structKernel}{Kernel} $\ast$}]{kernel }\end{DoxyParamCaption})}
+
+
+
+The implementation of opening, compound morphological operation. 
+
+The opening of an image F by a structuring element S is an erosion followed by a dilation
+
+Opening is so called because it can open up a gap between objects connected by a thin bridge of pixels. Any regions that have survived the erosion are restored to their original size by the dilation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em image} & The binary image to which we apply the opening\\
+\hline
+{\em kernel} & The structuring element used to apply the opening \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{morphology_8h_a83157245e99b92558b49d19f6552e025}\label{morphology_8h_a83157245e99b92558b49d19f6552e025}} 
+\index{morphology.\+h@{morphology.\+h}!square\+\_\+kernel@{square\+\_\+kernel}}
+\index{square\+\_\+kernel@{square\+\_\+kernel}!morphology.\+h@{morphology.\+h}}
+\subsubsection{\texorpdfstring{square\+\_\+kernel()}{square\_kernel()}}
+{\footnotesize\ttfamily struct \hyperlink{structKernel}{Kernel}$\ast$ square\+\_\+kernel (\begin{DoxyParamCaption}\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Create a new square kernel with a given size. 
+
+A common practice is to have odd dimensions of the structuring matrix and the origin defined as the centre of the matrix.
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & The size of the sides of the square\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the created kernel 
+\end{DoxyReturn}
