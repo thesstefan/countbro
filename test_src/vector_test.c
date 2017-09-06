@@ -1,11 +1,8 @@
-#include <assert.h>
 #include <stdio.h>
 
 #include "vector.h"
 
 int vector_create_test() {
-    printf("vector_create() test -> ");
-
     struct Vector *vector = vector_create();
 
     if (vector == NULL || vector->size != 0 || vector->capacity != VECTOR_INIT_CAPACITY || vector->items == NULL)
@@ -15,8 +12,6 @@ int vector_create_test() {
 }
 
 int vector_add_test() {
-    printf("vector_add() test -> ");
-
     struct Vector *vector = vector_create();
 
     for (int index = 0; index < 100; index++)
@@ -30,8 +25,6 @@ int vector_add_test() {
 }
 
 int vector_get_test() {
-    printf("vector_get() test -> ");
-
     struct Vector *vector = vector_create();
 
     for (int index = 0; index < 100; index++) {
@@ -45,8 +38,6 @@ int vector_get_test() {
 }
 
 int vector_set_test() {
-    printf("vector_set() test -> ");
-
     struct Vector *vector = vector_create();
 
     for (int index = 0; index < 100; index++) {
@@ -63,22 +54,27 @@ int vector_set_test() {
 }
 
 int vector_remove_test() {
-    printf("vector_remove() test -> ");
-
     struct Vector *vector = vector_create();
 
     for (int index = 0; index < 100; index++) {
         vector_add(vector, index);
 
-        if (vector_remove(vector, 0) == 0 && index >= 0 && index < vector->size) 
+        if (vector_remove(vector, 0) == 0 && index >= 0 && index < vector->size)
             return 0;
     }
 
-    if (vector->size != 0 || vector->capacity > 20) 
-       return 0;
+    if (vector->size != 0 || vector->capacity > 20)
+        return 0;
 
-   return 1;
+    return 1;
 } 
+
+void evaluate(int value) {
+    if (value)
+        printf("Success\n");
+    else
+        printf("Fail\n");
+}
 
 int main() {
     struct Vector *vector = vector_create();
@@ -86,20 +82,20 @@ int main() {
     // Padding
     printf("\n\n");
 
-    assert(vector_create_test()); 
-    printf("Success\n");
+    printf("vector_create() test -> ");
+    evaluate(vector_create_test()); 
 
-    assert(vector_add_test());
-    printf("Success\n");
+    printf("vector_add() test -> ");
+    evaluate(vector_add_test());
 
-    assert(vector_get_test());
-    printf("Success\n");
+    printf("vector_get() test -> ");
+    evaluate(vector_get_test());
 
-    assert(vector_set_test());
-    printf("Success\n");
+    printf("vector_set() test -> ");
+    evaluate(vector_set_test());
 
-    assert(vector_remove_test());
-    printf("Success\n");
+    printf("vector_remove() test -> ");
+    evaluate(vector_remove_test());
 
     // Padding for the next test
     printf("\n\n");
