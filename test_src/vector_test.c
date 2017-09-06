@@ -8,10 +8,8 @@ int vector_create_test() {
 
     struct Vector *vector = vector_create();
 
-    if (vector == NULL || vector->size != 0 || vector->capacity != VECTOR_INIT_CAPACITY || vector->items == NULL) {
-        printf("ERRROR");
+    if (vector == NULL || vector->size != 0 || vector->capacity != VECTOR_INIT_CAPACITY || vector->items == NULL)
         return 0;
-    }
 
     return 1;
 }
