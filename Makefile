@@ -4,6 +4,7 @@ INCLUDE = src
 
 SOURCE := $(wildcard src/*.c)
 OBJ := $(addprefix build/obj/, $(notdir $(SOURCE:.c=.o)))
+EXE := build/cellcount
 
 TEST_SOURCE := $(wildcard test_src/*.c)
 TEST_OBJ := $(addprefix build/test_artifacts/, $(notdir $(TEST_SOURCE:.c=.o)))
@@ -12,16 +13,16 @@ TEST_NEEDED_OBJ := $(filter-out build/obj/main.o, $(OBJ))
 
 HEADERS = $(wildcard src/*.h)
 
-all: cellcount
+all: run
 
-run: cellcount
-	./cellcount
+run: $(EXE)
+	$(EXE)
 
 run_test: test
 	$(foreach var, $(TEST_EXE), ./$(var) &)
 
-cellcount: build $(OBJ) 
-	$(CC) $(C_FLAGS) -o cellcount $(OBJ)
+$(EXE): build $(OBJ) 
+	$(CC) $(C_FLAGS) -o $(EXE) $(OBJ)
 
 test: build $(OBJ) $(TEST_OBJ) $(TEST_EXE)
 
