@@ -22,18 +22,18 @@ run_test: test
 	$(foreach var, $(TEST_EXE), ./$(var) &)
 
 $(EXE): build $(OBJ) 
-	$(CC) $(C_FLAGS) -o $(EXE) $(OBJ)
+	$(CC) $(CFLAGS) -o $(EXE) $(OBJ)
 
 test: build $(OBJ) $(TEST_OBJ) $(TEST_EXE)
 
 build/obj/%.o: src/%.c
-	$(CC) $(C_FLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 build/%.x: build/test_artifacts/%.o
-	$(CC) $(C_FLAGS) -o $@ $< $(TEST_NEEDED_OBJ)
+	$(CC) $(CFLAGS) -o $@ $< $(TEST_NEEDED_OBJ)
 
 build/test_artifacts/%.o: test_src/%.c $(HEADERS)
-	$(CC) $(C_FLAGS) -I$(INCLUDE) -c -o $@ $<
+	$(CC) $(CFLAGS) -I$(INCLUDE) -c -o $@ $<
 
 .PHONY: clean
 clean:
