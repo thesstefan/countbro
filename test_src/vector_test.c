@@ -77,8 +77,6 @@ void evaluate(int value) {
 }
 
 int main() {
-    struct Vector *vector = vector_create();
-
     // Padding
     printf("\n\n");
 
