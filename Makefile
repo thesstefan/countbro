@@ -6,6 +6,9 @@ SOURCE := $(wildcard src/*.c)
 OBJ := $(addprefix build/obj/, $(notdir $(SOURCE:.c=.o)))
 EXE := build/cellcount
 
+INPUT := data/input.bmp
+OUTPUT := data/output.bmp
+
 TEST_SOURCE := $(wildcard test_src/*.c)
 TEST_OBJ := $(addprefix build/test_artifacts/, $(notdir $(TEST_SOURCE:.c=.o)))
 TEST_EXE := $(addprefix build/, $(notdir $(TEST_SOURCE:.c=.x)))
@@ -16,7 +19,7 @@ HEADERS = $(wildcard src/*.h)
 all: run
 
 run: $(EXE)
-	$(EXE)
+	./$(EXE) $(INPUT) $(OUTPUT)
 
 run_test: test
 	$(foreach var, $(TEST_EXE), ./$(var) &)
