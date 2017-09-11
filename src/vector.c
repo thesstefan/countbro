@@ -31,7 +31,7 @@ int vector_add(struct Vector *vector, int item) {
             return 0;
     }
 
-    vector->items[vector->size] = item;
+//    vector->items[vector->size] = item;
     vector->size += 1;
 
     return 1;
