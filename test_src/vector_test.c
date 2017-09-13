@@ -34,7 +34,10 @@ int vector_get_test() {
     for (int index = 0; index < 100; index++) {
         vector_add(vector, index);
 
-        if (vector_get(vector, index) != index && index >= 0 && index < vector->size)
+        if (vector->items[index] != index)
+            return 0;
+
+        if (vector_get(vector, index) != index && vector->items[index] != index && index >= 0 && index < vector->size)
             return 0;
     }
 
@@ -50,7 +53,7 @@ int vector_set_test() {
         if (vector_set(vector, index, 1) == 0 && index >= 0 && index < vector->size)
             return 0;
 
-        if (vector_get(vector, index) != 1 && index >= 0 && index < vector->size)
+        if (vector_get(vector, index) != 1 && vector->items[index] != 1 && index >= 0 && index < vector->size)
             return 0;
     }
 
@@ -64,6 +67,9 @@ int vector_remove_test() {
         vector_add(vector, index);
 
         if (vector_remove(vector, 0) == 0 && index >= 0 && index < vector->size)
+            return 0;
+
+        if (vector_get(vector, 0) != -1 && vector->items[0] != -1)
             return 0;
     }
 
