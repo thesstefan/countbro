@@ -14,9 +14,13 @@ int vector_create_test() {
 int vector_add_test() {
     struct Vector *vector = vector_create();
 
-    for (int index = 0; index < 100; index++)
+    for (int index = 0; index < 100; index++) {
         if (vector_add(vector, index) == 0)
             return 0;
+
+        if (vector->items[vector->size - 1] != index)
+            return 0;
+    }
 
     if (vector->size != 100 || vector->capacity < 100)
         return 0;
