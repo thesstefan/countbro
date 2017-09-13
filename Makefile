@@ -16,7 +16,7 @@ TEST_NEEDED_OBJ := $(filter-out build/obj/main.o, $(OBJ))
 
 HEADERS = $(wildcard src/*.h)
 
-all: run
+all: $(EXE)
 
 run: $(EXE)
 	./$(EXE) $(INPUT) $(OUTPUT)
