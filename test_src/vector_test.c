@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "vector.h"
 
@@ -98,6 +99,7 @@ struct Vector *create_sample() {
 
     sample->size = TEST_LIMIT;
     sample->capacity = TEST_LIMIT;
+    sample->items = malloc(sizeof(int) * TEST_LIMIT);
 
     for (int index = 0; index < TEST_LIMIT; index++)
         sample->items[index] = index;
