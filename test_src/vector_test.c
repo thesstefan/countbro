@@ -43,12 +43,7 @@ int vector_add_test(struct Vector *sample) {
 }
 
 int vector_get_test(struct Vector *vector) {
-    for (int index = 0; index < 100; index++) {
-        vector_add(vector, index);
-
-        if (vector->items[index] != index)
-            return 0;
-
+    for (int index = 0; index < TEST_LIMIT; index++) {
         if (vector_get(vector, index) != index && vector->items[index] != index && index >= 0 && index < vector->size)
             return 0;
     }
@@ -57,13 +52,11 @@ int vector_get_test(struct Vector *vector) {
 }
 
 int vector_set_test(struct Vector *vector) {
-    for (int index = 0; index < 100; index++) {
-        vector_add(vector, index);
-
+    for (int index = 0; index < TEST_LIMIT; index++) {
         if (vector_set(vector, index, 1) == 0 && index >= 0 && index < vector->size)
             return 0;
 
-        if (vector_get(vector, index) != 1 && vector->items[index] != 1 && index >= 0 && index < vector->size)
+        if (vector->items[index] != 1 && index >= 0 && index < vector->size)
             return 0;
     }
 
@@ -71,17 +64,17 @@ int vector_set_test(struct Vector *vector) {
 }
 
 int vector_remove_test(struct Vector *vector) {
-    for (int index = 0; index < 100; index++) {
-        vector_add(vector, index);
-
-        if (vector_remove(vector, 0) == 0 && index >= 0 && index < vector->size)
-            return 0;
-
-        if (vector_get(vector, 0) != -1 && vector->items[0] != -1)
+    for (int index = 0; index < TEST_LIMIT; index++) {
+        if (vector_remove(vector, 0) == 0)
             return 0;
     }
-
+        
     if (vector->size != 0 || vector->capacity > 20)
+        return 0;
+
+    struct Vector *empty = vector_create();
+
+    if (!vector_is_equal(empty, vector))
         return 0;
 
     return 1;
@@ -119,19 +112,17 @@ int main() {
     printf("vector_add() test -> ");
     evaluate(vector_add_test(sample));
 
-/*
     printf("vector_get() test -> ");
-    evaluate(vector_get_test());
+    evaluate(vector_get_test(sample));
 
     printf("vector_set() test -> ");
-    evaluate(vector_set_test());
+    evaluate(vector_set_test(sample));
 
     printf("vector_remove() test -> ");
-    evaluate(vector_remove_test());
+    evaluate(vector_remove_test(sample));
 
     // Padding for the next test
     printf("\n\n");
-*/
 
     return 0; 
 }
