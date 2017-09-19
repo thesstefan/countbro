@@ -60,7 +60,7 @@ int vector_remove(struct Vector *vector, int index) {
     for (int shift_index = index; shift_index < vector->size - 1; shift_index++)
         vector->items[shift_index] = vector->items[shift_index + 1];
 
-    vector->items[vector->size - 1] = -1;
+    vector->items[vector->size] = -1;
     vector->size--;
 
     if (vector->size > 0 && vector->size == vector->capacity / 4)

@@ -7,8 +7,8 @@
     #define NEEDED_NEIGHBORS 3
 #endif
 
-#define MAX_LABELS 100
-#define MAX_SETS 100
+#define MAX_LABELS 1000
+#define MAX_SETS 1000
 
 struct Labels_list {
     int height;

@@ -19,20 +19,21 @@ int main(int argc, char *argv[]) {
 // GOOD
     struct grayscale_image *grayscale = to_grayscale_matrix(image);
 
-    struct binary_image *binary = treshold(grayscale, 94);
+    struct binary_image *binary = treshold(grayscale, 150);
 
+// 94
+/*
     struct Kernel *opening_kernel = square_kernel(3);
     struct Kernel *closing_kernel = square_kernel(5);
 
     opening(binary, opening_kernel);
     closing(binary, closing_kernel);
-
+*/
     struct Labels_list *labels = labeling(binary);
 
-//    print_labels(labels);
+    print_labels(labels);
 
     struct grayscale_image *tresholded_grayscale = from_binary_to_grayscale(binary);
-
 
    from_grayscale_matrix(tresholded_grayscale, image);
 
@@ -42,8 +43,10 @@ int main(int argc, char *argv[]) {
 
    free(grayscale);
    free(binary);
+   /*
    free(opening_kernel);
    free(closing_kernel);
+   */
    free(tresholded_grayscale);
 
     return 0;
