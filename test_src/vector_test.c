@@ -5,17 +5,6 @@
 
 #define TEST_LIMIT 100
 
-int vector_is_equal(struct Vector *vector_1, struct Vector *vector_2) {
-    if (vector_1->size != vector_2->size)
-        return 0;
-
-    for (int index = 0; index < vector_1->size; index++)
-        if (vector_1->items[index] != vector_2->items[index])
-            return 0;
-
-    return 1;
-}
-
 int vector_create_test() {
     struct Vector *vector = vector_create();
 
@@ -25,28 +14,47 @@ int vector_create_test() {
     return 1;
 }
 
-int vector_add_test(struct Vector *sample) {
-    struct Vector *vector = vector_create();
+int vector_add_test(struct Vector *vector) {
+    if (vector_add(vector, 0) == 0)
+        return 0;
 
-    for (int index = 0; index < TEST_LIMIT; index++) {
+    if (vector->size != 1 && vector->items[0] != 0)
+        return 0;
+
+    for (int index = 1; index < 5; index++) {
         if (vector_add(vector, index) == 0)
             return 0;
 
-        if (vector->items[index] != index)
+        if (vector->size != index && vector->items[index] != index)
             return 0;
     }
-
-    if (!vector_is_equal(vector, sample))
-        return 0;
 
     return 1;
 }
 
 int vector_get_test(struct Vector *vector) {
-    for (int index = 0; index < TEST_LIMIT; index++) {
-        if (vector_get(vector, index) != index && vector->items[index] != index && index >= 0 && index < vector->size)
-            return 0;
-    }
+    if (vector_get(vector, 0) != -1)
+        return 0;
+
+    vector->size = 1;
+    vector->items[0] = 1;
+
+    if (vector_get(vector, 0) != 1)
+        return 0;
+
+    vector->size++;
+    vector->items[1] = 1234;
+
+    if (vector_get(vector, 0) != 1 && vector_get(vector, 1) != 1234) 
+        return 0;
+
+    if (vector_get(vector, -1) != -1 && vector_get(vector, vector->size + 1) != -1)
+        return 0;
+    
+    vector = NULL;
+
+    if (vector_get(vector, 0) != -1)
+        return 0;
 
     return 1;
 }
