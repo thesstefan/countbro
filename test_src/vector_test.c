@@ -60,13 +60,29 @@ int vector_get_test(struct Vector *vector) {
 }
 
 int vector_set_test(struct Vector *vector) {
-    for (int index = 0; index < TEST_LIMIT; index++) {
-        if (vector_set(vector, index, 1) == 0 && index >= 0 && index < vector->size)
-            return 0;
+    if (vector_set(vector, 0, 0) != 0)
+        return 0;
 
-        if (vector->items[index] != 1 && index >= 0 && index < vector->size)
-            return 0;
-    }
+    vector->size = 1;
+    vector->items[0] = 1;
+
+    if (vector_set(vector, -1, 0) != 0 || vector_set(vector, vector->size + 1, 0) != 0)
+        return 0;
+
+    if (vector_set(vector, 0, 100) != 1)
+        return 0;
+
+    if (vector->items[0] != 100)
+        return 0;
+
+    vector->size = 2;
+    vector->items[1] = 9999;
+
+    if (vector_set(vector, 1, 9999) != 1)
+        return 0;
+
+    if (vector->items[1] != 9999)
+        return 0;
 
     return 1;
 }
