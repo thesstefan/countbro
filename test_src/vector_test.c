@@ -29,6 +29,11 @@ int vector_add_test(struct Vector *vector) {
             return 0;
     }
 
+    vector = NULL;
+
+    if (vector_add(vector, 0) != 0)
+        return 0;
+
     return 1;
 }
 
@@ -42,7 +47,7 @@ int vector_get_test(struct Vector *vector) {
     if (vector_get(vector, 0) != 1)
         return 0;
 
-    vector->size++;
+    vector->size = 2;
     vector->items[1] = 1234;
 
     if (vector_get(vector, 0) != 1 && vector_get(vector, 1) != 1234) 
@@ -84,21 +89,74 @@ int vector_set_test(struct Vector *vector) {
     if (vector->items[1] != 9999)
         return 0;
 
+    vector = NULL;
+
+    if (vector_set(vector, 0, 0) != 0)
+        return 0;
+
     return 1;
 }
 
 int vector_remove_test(struct Vector *vector) {
-    for (int index = 0; index < TEST_LIMIT; index++) {
-        if (vector_remove(vector, 0) == 0)
-            return 0;
-    }
-        
-    if (vector->size != 0 || vector->capacity > 20)
+    if (vector_remove(vector, 0) != 0)
         return 0;
 
-    struct Vector *empty = vector_create();
+    vector->size = 1;
+    vector->items[0] = 1;
 
-    if (!vector_is_equal(empty, vector))
+    if (vector_remove(vector, 0) != 1)
+        return 0;
+
+    if (vector->size != 0)
+        return 0;
+
+    if (vector->items[0] != -1)
+        return 0;
+
+    vector->size = 5;
+
+    for (int index = 0; index < 5; index++) {
+        vector->items[index] = index;
+
+        if (vector_remove(vector, 0) != 1)
+            return 0;
+
+        if (vector->size != 4 - index)
+            return 0;
+    }
+
+    if (vector->items[0] != -1)
+        return 0;
+
+    vector->size = 2;
+    vector->items[0] = 10;
+    vector->items[1] = 10000;
+
+    if (vector_remove(vector, 1) != 1)
+        return 0;
+
+    if (vector->size != 1)
+        return 0;
+
+    if (vector->items[1] != -1 && vector->items[0] != 10)
+        return 0;
+
+    vector->size = 2;
+    vector->items[0] = 10;
+    vector->items[1] = 10000;
+
+    if (vector_remove(vector, 0) != 1)
+        return 0;
+
+    if (vector->size != 1)
+        return 0;
+
+    if (vector->items[0] != 10000 && vector->items[1] != -1)
+        return 0;
+
+    vector = NULL;
+
+    if (vector_remove(vector, 0) != 0)
         return 0;
 
     return 1;
@@ -111,39 +169,28 @@ void evaluate(int value) {
         printf("Fail\n");
 }
 
-struct Vector *create_sample() {
-    struct Vector *sample = vector_create();
-
-    sample->size = TEST_LIMIT;
-    sample->capacity = TEST_LIMIT;
-    sample->items = malloc(sizeof(int) * TEST_LIMIT);
-
-    for (int index = 0; index < TEST_LIMIT; index++)
-        sample->items[index] = index;
-
-    return sample;
-}
-
 int main() {
     // Padding
     printf("\n\n");
 
-    struct Vector *sample = create_sample();
-
     printf("vector_create() test -> ");
     evaluate(vector_create_test()); 
 
+    struct Vector *vector = vector_create();
     printf("vector_add() test -> ");
-    evaluate(vector_add_test(sample));
+    evaluate(vector_add_test(vector));
 
+    vector = vector_create();
     printf("vector_get() test -> ");
-    evaluate(vector_get_test(sample));
+    evaluate(vector_get_test(vector));
 
+    vector = vector_create();
     printf("vector_set() test -> ");
-    evaluate(vector_set_test(sample));
+    evaluate(vector_set_test(vector));
 
+    vector = vector_create();
     printf("vector_remove() test -> ");
-    evaluate(vector_remove_test(sample));
+    evaluate(vector_remove_test(vector));
 
     // Padding for the next test
     printf("\n\n");
