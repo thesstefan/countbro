@@ -52,11 +52,12 @@ int vector_set(struct Vector *vector, int index, int item);
  *
  * @param vector The vector which contains the element
  * @param index  The index of the element
+ * @param value  The value of the element
  *
- * @return The value of the element on success
- *         -1 on failure (e.g. element index is out of bounds)
+ * @return 1 on success
+ *         0 on failure (e.g. element index is out of bounds)
  */
-int vector_get(struct Vector *vector, int index);
+int vector_get(struct Vector *vector, int index, int *value);
 
 /** 
  * @brief Delete an element of the vector
