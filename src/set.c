@@ -24,11 +24,17 @@ int set_cardinal(struct Set *set) {
     if (set == NULL)
         return -1;
 
+    if (set->representation == NULL)
+        return -1;
+
     return set->representation->size;
 }
 
 int set_find(struct Set *set, int item) {
     if (set == NULL)
+        return -1;
+
+    if (set->representation == NULL)
         return -1;
 
     if (set_cardinal(set) == 0)
@@ -51,6 +57,9 @@ int set_add(struct Set *set, int item) {
     if (set == NULL)
         return -1;
 
+    if (set->representation == NULL)
+        return -1;
+
     if (set_find(set, item) == SUCCESS)
         return 1;
 
@@ -62,6 +71,9 @@ int set_add(struct Set *set, int item) {
 
 int set_remove(struct Set *set, int item) {
     if (set == NULL)
+        return -1;
+
+    if (set->representation == NULL)
         return -1;
 
     if (set_cardinal(set) == 0)
@@ -88,7 +100,16 @@ int set_remove(struct Set *set, int item) {
 }
 
 int set_equals(struct Set *a, struct Set *b) {
-    if (a == NULL || b == NULL)
+    if (a == NULL) 
+        return -1;
+
+    if (b == NULL)
+        return -1;
+
+    if (a->representation == NULL)
+        return -1;
+
+    if (b->representation == NULL)
         return -1;
 
     if (set_cardinal(a) != set_cardinal(b))
@@ -108,7 +129,16 @@ int set_equals(struct Set *a, struct Set *b) {
 }
 
 struct Set *set_intersection(struct Set *a, struct Set *b) {
-    if (a == NULL || b == NULL)
+    if (a == NULL)
+        return NULL;
+    
+    if (a->representation == NULL)
+        return NULL;
+
+    if (b == NULL)
+        return NULL;
+
+    if (b->representation == NULL)
         return NULL;
 
     struct Set *intersection = set_create();
@@ -128,7 +158,16 @@ struct Set *set_intersection(struct Set *a, struct Set *b) {
 }
 
 struct Set *set_union(struct Set *a, struct Set *b) {
-    if (a == NULL || b == NULL)
+    if (a == NULL)
+        return NULL;
+    
+    if (a->representation == NULL)
+        return NULL;
+
+    if (b == NULL)
+        return NULL;
+
+    if (b->representation == NULL)
         return NULL;
     
     struct Set *union_set = set_create();
@@ -157,6 +196,18 @@ struct Set *set_union(struct Set *a, struct Set *b) {
 }
 
 struct Set *set_difference(struct Set *a, struct Set *b) {
+    if (a == NULL)
+        return NULL;
+    
+    if (a->representation == NULL)
+        return NULL;
+
+    if (b == NULL)
+        return NULL;
+
+    if (b->representation == NULL)
+        return NULL;
+
     struct Set *difference = set_create();
 
     for (int index = 0; index < set_cardinal(a); index++) {
