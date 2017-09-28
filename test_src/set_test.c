@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "vector.h"
 #include "set.h"
@@ -10,11 +11,19 @@ int set_create_test() {
     if (set == NULL)
         return FAIL;
 
-    if (set->representation == NULL)
-        return FAIL;
+    if (set->representation == NULL) {
+        set_delete(set);
 
-    if (set->representation->size != 0 || set->representation->capacity != VECTOR_INIT_CAPACITY || set->representation->items == NULL)
         return FAIL;
+    }
+
+    if (set->representation->size != 0 || set->representation->capacity != VECTOR_INIT_CAPACITY || set->representation->items == NULL) {
+        set_delete(set);
+
+        return FAIL;
+    }
+
+    set_delete(set);
 
     return SUCCESS;
 }
@@ -25,11 +34,13 @@ int set_cardinal_test(struct Set *set) {
     if (set_cardinal(set) != set->representation->size || set_cardinal(set) != 10)
         return FAIL;
 
+    vector_free(set->representation);
     set->representation = NULL;
 
     if (set_cardinal(set) != -1)
         return FAIL;
 
+    set_delete(set);
     set = NULL;
 
     if (set_cardinal(set) != -1)
@@ -49,11 +60,13 @@ int set_find_test(struct Set *set) {
     if (set_find(set, 2) != 1)
         return FAIL;
 
+    vector_free(set->representation);
     set->representation = NULL;
 
     if (set_find(set, 123) != -1)
         return FAIL;
 
+    set_delete(set);
     set = NULL;
 
     if (set_find(set, 123) != -1)
@@ -77,11 +90,13 @@ int set_add_test(struct Set *set) {
     if (set->representation->size != 2)
         return FAIL;
 
+    vector_free(set->representation);
     set->representation = NULL;
 
     if (set_add(set, 3) != -1)
         return FAIL;
 
+    set_delete(set);
     set = NULL;
 
     if (set_add(set, 4) != -1)
@@ -106,11 +121,13 @@ int set_remove_test(struct Set *set) {
     if (set->representation->size != 0)
         return FAIL;
 
+    vector_free(set->representation);
     set->representation = NULL;
 
     if (set_remove(set, 100) != -1)
         return FAIL;
 
+    set_delete(set);
     set = NULL;
 
     if (set_remove(set, 100) != -1)
@@ -133,21 +150,25 @@ int set_equals_test(struct Set *a, struct Set *b) {
     if (set_equals(a, b) != 0)
         return FAIL;
 
+    vector_free(a->representation);
     a->representation = NULL;
 
     if (set_equals(a, b) != -1)
         return FAIL;
 
+    vector_free(b->representation);
     b->representation = NULL;
 
     if (set_equals(a, b) != -1)
         return FAIL;
 
+    set_delete(a);
     a = NULL;
 
     if (set_equals(a, b) != -1)
         return FAIL;
 
+    set_delete(b);
     b = NULL;
 
     if (set_equals(a, b) != -1)
@@ -173,6 +194,8 @@ int set_intersection_test(struct Set *a, struct Set *b) {
             return FAIL;
     }
 
+    set_delete(c);
+
     c = set_intersection(b, a);
 
     if (c != NULL) {
@@ -183,21 +206,27 @@ int set_intersection_test(struct Set *a, struct Set *b) {
             return FAIL;
     }
 
+    set_delete(c);
+
+    vector_free(a->representation);
     a->representation = NULL;
 
     if (set_intersection(a, b) != NULL)
         return FAIL;
 
+    vector_free(b->representation);
     b->representation = NULL;
 
     if (set_intersection(a, b) != NULL)
         return FAIL;
 
+    set_delete(a);
     a = NULL;
 
     if (set_intersection(a, b) != NULL)
         return FAIL;
 
+    set_delete(b);
     b = NULL;
 
     if (set_intersection(a, b) != NULL)
@@ -223,6 +252,8 @@ int set_union_test(struct Set *a, struct Set *b) {
                 return FAIL;
     }
 
+    set_delete(c);
+
     c = set_union(b, a);
 
     if (c != NULL) {
@@ -233,21 +264,27 @@ int set_union_test(struct Set *a, struct Set *b) {
             return FAIL;
     }
 
+    set_delete(c);
+
+    vector_free(a->representation);
     a->representation = NULL;
 
     if (set_union(a, b) != NULL)
         return FAIL;
 
+    vector_free(b->representation);
     b->representation = NULL;
 
     if (set_union(a, b) != NULL)
         return FAIL;
 
+    set_delete(a);
     a = NULL;
 
     if (set_union(a, b) != NULL)
         return FAIL;
 
+    set_delete(b);
     b = NULL;
 
     if (set_union(a, b) != NULL)
@@ -273,6 +310,8 @@ int set_difference_test(struct Set *a, struct Set *b) {
             return FAIL;
     }
 
+    set_delete(c);
+
     c = set_difference(b, a);
 
     if (c != NULL) {
@@ -283,21 +322,27 @@ int set_difference_test(struct Set *a, struct Set *b) {
             return FAIL;
     }
 
+    set_delete(c);
+
+    vector_free(a->representation);
     a->representation = NULL;
 
     if (set_difference(a, b) != NULL)
         return FAIL;
 
+    vector_free(b->representation);
     b->representation = NULL;
 
     if (set_difference(a, b) != NULL)
         return FAIL;
 
+    set_delete(a);
     a = NULL;
 
     if (set_difference(a, b) != NULL)
         return FAIL;
 
+    set_delete(b);
     b = NULL;
 
     if (set_difference(a, b) != NULL)
