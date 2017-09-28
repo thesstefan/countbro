@@ -7,8 +7,13 @@
 int vector_create_test() {
     struct Vector *vector = vector_create();
 
-    if (vector == NULL || vector->size != 0 || vector->capacity != VECTOR_INIT_CAPACITY || vector->items == NULL)
+    if (vector == NULL || vector->size != 0 || vector->capacity != VECTOR_INIT_CAPACITY || vector->items == NULL) {
+        vector_free(vector);
+
         return FAIL;
+    }
+
+    vector_free(vector);
 
     return SUCCESS;
 }
@@ -171,21 +176,22 @@ int main() {
     struct Vector *vector = vector_create();
     printf("vector_add() test -> ");
     evaluate(vector_add_test(vector));
+    vector_free(vector);
     
     vector = vector_create();
     printf("vector_get() test -> ");
     evaluate(vector_get_test(vector));
+    vector_free(vector);
 
     vector = vector_create();
     printf("vector_set() test -> ");
     evaluate(vector_set_test(vector));
+    vector_free(vector);
 
     vector = vector_create();
     printf("vector_remove() test -> ");
     evaluate(vector_remove_test(vector));
-
-    // Padding for the next test
-    printf("\n\n");
+    vector_free(vector);
 
     return 0; 
 }
