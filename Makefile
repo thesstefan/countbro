@@ -6,7 +6,7 @@ SOURCE := $(wildcard src/*.c)
 OBJ := $(addprefix build/obj/, $(notdir $(SOURCE:.c=.o)))
 EXE := build/cellcount
 
-INPUT := data/in.bmp
+INPUT := data/input.bmp
 OUTPUT := data/output.bmp
 
 TEST_SOURCE := $(wildcard test_src/*.c)
