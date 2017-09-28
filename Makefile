@@ -11,7 +11,7 @@ OUTPUT := data/output.bmp
 
 TEST_SOURCE := $(wildcard test_src/*.c)
 TEST_OBJ := $(addprefix build/test_obj/, $(notdir $(TEST_SOURCE:.c=.o)))
-TEST_EXE := $(addprefix build/test/, $(notdir $(TEST_SOURCE:.c=)))
+TEST_EXE := $(filter-out build/cellcount, $(addprefix build/, $(notdir $(TEST_SOURCE:.c=))))
 TEST_NEEDED_OBJ := $(filter-out build/obj/main.o, $(OBJ))
 
 HEADERS = $(wildcard src/*.h)
@@ -32,7 +32,7 @@ test: build $(OBJ) $(TEST_OBJ) $(TEST_EXE)
 build/obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-build/test/%: build/test_obj/%.o
+build/%: build/test_obj/%.o
 	$(CC) $(CFLAGS) -o $@ $< $(TEST_NEEDED_OBJ)
 
 build/test_obj/%.o: test_src/%.c $(HEADERS)
@@ -44,4 +44,4 @@ clean:
 
 .PHONY: build
 build:
-	@if [ ! -d "build" ]; then mkdir build && mkdir build/obj && mkdir build/test_obj && mkdir build/test; fi
+	@if [ ! -d "build" ]; then mkdir build && mkdir build/obj && mkdir build/test_obj; fi
