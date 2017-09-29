@@ -107,7 +107,7 @@ int main() {
     printf("\n\n");
 
     printf("read_image_from_file() test -> ");
-    evaluate(read_image_test("/home/stefan/code/data/image_read_test_file"));
+    evaluate(read_image_test("data/image_read_test_file"));
 
     printf("\n\n");
 
