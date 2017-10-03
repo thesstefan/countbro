@@ -5,23 +5,57 @@
 #include "errors.h"
 #include "image.h"
 
-int equal_headers(unsigned char *header_1, unsigned char *header_2) {
+unsigned char *raw_read_headers(FILE *input) {
+    unsigned char *headers = malloc(sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
+    
+    if (headers == NULL) {
+        free(headers);
+
+        return NULL;
+    }
+
+    fread(headers, 1, sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER), input);
+
+    return headers;
+}
+
+int get_headers_state(struct Image *image, FILE *input) {
+    unsigned char *raw_headers = raw_read_headers(input);
+
+    if (raw_headers == NULL)
+        return FAIL;
+
+    unsigned char *struct_headers = malloc(sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
+
+    if (struct_headers == NULL) {
+        free(struct_headers);
+        free(raw_headers);
+
+        return FAIL;
+    }
+
+    memcpy(struct_headers, image, sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
+
     for (int index = 0; index < sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER); index++)
-        if (*(header_1 + index) != *(header_2 + index))
-            return 0;
+        if (*(struct_headers + index) != *(raw_headers + index)) {
+            free(struct_headers);
+            free(raw_headers);
 
-    return 1;
+            return FAIL;
+        }
+
+    free(struct_headers);
+    free(raw_headers);
+
+    return SUCCESS;
 }
 
-int equal_pixels(struct PIXEL *pixels_1, struct PIXEL *pixels_2, int size) {
-    for (int index = 0; index < size; index++)
-        if ((pixels_1 + index)->red != (pixels_2 + index)->red || (pixels_1 + index)->green != (pixels_2 + index)->green || (pixels_1 + index)->blue != (pixels_2 + index)->blue)
-            return 0;
+struct PIXEL *raw_read_pixels(int height, int width, FILE *input) {
+    struct PIXEL *pixels = malloc(sizeof(struct PIXEL) * height * width);
 
-    return 1;
-}
+    if (pixels == NULL)
+        return NULL;
 
-void read_pixels(int height, int width, struct PIXEL *pixels, FILE *input) {
     int subpixels_per_line = width * 3;
     int required_padding = (subpixels_per_line % 4) ? 4 - subpixels_per_line % 4 : 0;
     int padding_dump = 0;
@@ -30,10 +64,55 @@ void read_pixels(int height, int width, struct PIXEL *pixels, FILE *input) {
         fread(pixels + height_index * width, sizeof(struct PIXEL), width, input);
         fread(&padding_dump, sizeof(unsigned char), required_padding, input);
     }
+
+    return pixels;
 }
 
-int read_image_test(char *filename) {
-    struct Image *image = read_image_from_file("Non-existent file");
+int get_pixels_state(struct Image *image, FILE *input) {
+    struct PIXEL *pixels = raw_read_pixels(image->image_header.height, image->image_header.width, input);
+
+    if (pixels == NULL)
+        return FAIL;
+
+    for (int index = 0; index < image->image_header.height * image->image_header.width; index++)
+        if (((pixels + index)->red != (image->pixels + index)->red) || ((pixels + index)->green != (image->pixels + index)->green) || ((pixels + index)->blue != (image->pixels + index)->blue)) {
+            free(pixels);
+
+            return FAIL;
+        }
+
+    free(pixels);
+        
+    return SUCCESS;
+}
+
+int standard_read_image(char *filename) {
+    struct Image *image = read_image_from_file(filename);
+
+    FILE *input = fopen(filename, "rb");
+
+    if (get_headers_state(image, input) != SUCCESS) {
+        delete_image(image);
+        fclose(input);
+
+        return FAIL;
+    }
+
+    if (get_pixels_state(image, input) != SUCCESS) {
+        delete_image(image);
+        fclose(input);
+        
+        return FAIL;
+    }
+
+    delete_image(image);
+    fclose(input);
+
+    return SUCCESS;
+}
+
+int read_non_existent_file() {
+    struct Image *image = read_image_from_file("Nothing");
 
     if (image != NULL) {
         delete_image(image);
@@ -41,68 +120,20 @@ int read_image_test(char *filename) {
         return FAIL;
     }
 
-    image = read_image_from_file(filename);
+    return SUCCESS;
+}
 
-    if (image == NULL)
+
+int read_image_test(char *filename) {
+    if (read_non_existent_file() != SUCCESS)
         return FAIL;
 
-    FILE *input = fopen(filename, "rb");
-    fseek(input, 0, SEEK_SET);
-    
-    if (input == NULL) {
-        delete_image(image);
-
+    if (standard_read_image(filename) != SUCCESS)
         return FAIL;
-    }
- 
-    unsigned char *headers = malloc(sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
-
-    if (headers == NULL)
-        return FAIL;
-
-    fread(headers, 1, sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER), input);
-
-    unsigned char *struct_headers = malloc(sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
-
-    if (struct_headers == NULL) {
-        free(headers);
-
-        return FAIL;
-    }
-
-    memcpy(struct_headers, image, sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
-
-    if (equal_headers(headers, struct_headers) != 1) {
-        free(headers);
-        free(struct_headers);
-
-        return FAIL;
-    }
-
-    free(headers);
-    free(struct_headers);
-
-    fseek(input, image->file_header.image_data_offset, SEEK_SET);
-
-    struct PIXEL *pixels = malloc(image->image_header.height * image->image_header.width * sizeof(struct PIXEL));
-
-    read_pixels(image->image_header.height, image->image_header.width, pixels, input);
-
-    if (equal_pixels(pixels, image->pixels, image->image_header.height * image->image_header.width) != 1) {
-        free(pixels);
-
-        return FAIL;
-    }
-
-    free(pixels);
-
-    delete_image(image);
-
-    fclose(input);
 
     return SUCCESS;
 }
-        
+
 int main() {
     printf("\n\n");
 
