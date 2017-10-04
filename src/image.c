@@ -25,10 +25,16 @@ void _write_pixels(int height, int width, struct PIXEL *pixels, FILE *output) {
 struct Image *_read_image(FILE *input) {
     struct Image *image = malloc(sizeof(struct Image));
 
+    if (image == NULL)
+        return NULL;
+
     fread(&(image->file_header), 1, sizeof(struct FILE_HEADER), input);
     fread(&(image->image_header), 1, sizeof(struct IMAGE_HEADER), input);
 
     image->pixels = malloc(image->image_header.height * image->image_header.width * sizeof(struct PIXEL));
+
+    if (image->pixels == NULL)
+        return NULL;
 
     fseek(input, image->file_header.image_data_offset, SEEK_SET);
 
@@ -52,21 +58,44 @@ void _write_image(struct Image *image, FILE *output) {
 
 struct Image *read_image_from_file(char *filename) {
     FILE *input = fopen(filename, "rb");
+
+    if (input == NULL)
+        return NULL;
+
     struct Image *image = _read_image(input);
+
+    if (image == NULL)
+        return NULL;
+
     fclose(input);
 
     return image;
 }
 
-void write_image_to_file(struct Image *image, char *filename) {
+int write_image_to_file(struct Image *image, char *filename) {
     FILE *output = fopen(filename, "wb");
+
+    if (output == NULL) {
+        fclose(output);
+
+        return -1;
+    }
+
+    if (image == NULL) {
+        fclose(output);
+
+        return -1;
+    }
+
     _write_image(image, output);
     fclose(output);
+
+    return 0;
 }
 
 void delete_image(struct Image *image) {
-    free(image->pixels);
-    free(image);
-}
+    if (image != NULL)
+        free(image->pixels);
 
-         
+    free(image);
+}         

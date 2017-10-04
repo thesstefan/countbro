@@ -120,15 +120,120 @@ int read_non_existent_file() {
         return FAIL;
     }
 
+    delete_image(image);
+
     return SUCCESS;
 }
 
 
 int read_image_test(char *filename) {
+/*
     if (read_non_existent_file() != SUCCESS)
         return FAIL;
+*/
 
     if (standard_read_image(filename) != SUCCESS)
+        return FAIL;
+
+    return SUCCESS;
+}
+
+struct Image *create_test_image(FILE *input) {
+    struct Image *image = malloc(sizeof(struct Image));
+
+    if (image == NULL)
+        return NULL;
+
+    unsigned char *headers = raw_read_headers(input);
+    memcpy(image, headers, sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER));
+
+    free(headers);
+
+    image->pixels = raw_read_pixels(image->image_header.height, image->image_header.width, input);
+
+    return image;
+}
+
+int are_equal_files(FILE *file_1, FILE *file_2) {
+    if (file_1 == NULL || file_2 == NULL)
+        return -1;
+
+    char character_1 = fgetc(file_1);
+    char character_2 = fgetc(file_2);
+
+    while ((character_1 != EOF) && (character_2 != EOF)) {
+        if (character_1 != character_2)
+            return 0;
+
+        character_1 = fgetc(file_1);
+        character_2 = fgetc(file_2);
+    }
+
+    return 1;
+}
+
+int write_non_existent_image(char *filename) {
+    struct Image *image = NULL;
+
+    if (write_image_to_file(image, "temp") != -1) {
+        remove("temp");
+
+        return FAIL;
+    }
+
+    remove("temp");
+
+    return SUCCESS;
+}
+
+int standard_write_image_test(char *input_filename) {
+    FILE *input = fopen(input_filename, "rb");
+
+    if (input == NULL) {
+        fclose(input);
+
+        return FAIL;
+    }
+
+    struct Image *image = create_test_image(input);
+
+    if (image == NULL) {
+        fclose(input);
+
+        return FAIL;
+    }
+
+    if (write_image_to_file(image, "temp_file") != SUCCESS) {
+        delete_image(image);
+        fclose(input);
+
+        return FAIL;
+    }
+
+    delete_image(image);
+
+    FILE *output = fopen("temp_file", "wb");
+
+    if (!are_equal_files(input, output)) {
+        fclose(input);
+        fclose(output);
+
+        return FAIL;
+    }
+
+    fclose(input);
+    fclose(output);
+
+    remove("temp_file");
+
+    return SUCCESS;
+} 
+
+int write_image_test(char *filename) {
+    if (write_non_existent_image(filename) != SUCCESS)
+        return FAIL;
+
+    if (standard_write_image_test(filename) != SUCCESS)
         return FAIL;
 
     return SUCCESS;
@@ -138,10 +243,12 @@ int main() {
     printf("\n\n");
 
     printf("read_image_from_file() test -> ");
-    evaluate(read_image_test("data/image_read_test_file"));
+    evaluate(read_image_test("data/image_test_file"));
+
+    printf("write_image_to_file() test -> ");
+    evaluate(write_image_test("data/image_test_file"));
 
     printf("\n\n");
 
     return 0;
 }
-

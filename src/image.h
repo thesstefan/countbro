@@ -41,7 +41,7 @@ struct Image {
 };
 
 struct Image *read_image_from_file(char *file_name);
-void write_image_to_file(struct Image *image, char *file_name);
+int write_image_to_file(struct Image *image, char *file_name);
 void delete_image(struct Image *image);
 
 #endif
