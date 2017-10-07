@@ -89,6 +89,9 @@ int get_pixels_state(struct Image *image, FILE *input) {
 int standard_read_image(char *filename) {
     struct Image *image = read_image_from_file(filename);
 
+    if (image == NULL)
+        return FAIL;
+
     FILE *input = fopen(filename, "rb");
 
     if (get_headers_state(image, input) != SUCCESS) {
@@ -125,12 +128,26 @@ int read_non_existent_file() {
     return SUCCESS;
 }
 
+int read_corrupted_image(char *corrupted_bmp) {
+    struct Image *image = read_image_from_file(corrupted_bmp);
 
-int read_image_test(char *filename) {
+    if (image != NULL) {
+        delete_image(image);
+
+        return FAIL;
+    }
+
+    return SUCCESS;
+}
+
+
+int read_image_test(char *filename, char *corrupted) {
 /*
     if (read_non_existent_file() != SUCCESS)
         return FAIL;
 */
+    if (read_corrupted_image(corrupted) != SUCCESS)
+        return FAIL;
 
     if (standard_read_image(filename) != SUCCESS)
         return FAIL;
@@ -243,7 +260,7 @@ int main() {
     printf("\n\n");
 
     printf("read_image_from_file() test -> ");
-    evaluate(read_image_test("data/image_test_file"));
+    evaluate(read_image_test("data/image_test_file", "data/corrupted_image_file"));
 
     printf("write_image_to_file() test -> ");
     evaluate(write_image_test("data/image_test_file"));
