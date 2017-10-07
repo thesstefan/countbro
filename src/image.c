@@ -1,5 +1,51 @@
 #include "image.h"
 
+int _valid_pixels(struct Image *image) {
+    for (int index = 0; index < image->image_header.width * image->image_header.height; index++)
+        if (image->pixels + index != NULL) {
+            if ((image->pixels + index)->red < 0 || (image->pixels + index)->red > 255)
+                return 0;
+
+            if ((image->pixels + index)->green < 0 || (image->pixels + index)->green > 255)
+                return 0;
+
+            if ((image->pixels + index)->blue < 0 || (image->pixels + index)->blue > 255)
+                return 0;
+        } else
+            return 0;
+
+    return 1;
+}
+
+int _valid_headers(struct Image *image) {
+    if (image->file_header.file_marker_1 != 'B' || image->file_header.file_marker_2 != 'M')
+        return 0;
+
+    if (image->file_header.bmp_size < sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER))
+        return 0;
+
+    if (image->image_header.header_size != 40)
+        return 0;
+
+    if (image->image_header.width <= 0 || image->image_header.height <= 0)
+        return 0;
+
+    if (image->image_header.planes != 1)
+        return 0;
+
+    if (image->image_header.compression_type != 0)
+        return 0;
+
+    if (image->image_header.pixel_per_meter_x < 0 || image->image_header.pixel_per_meter_y < 0)
+        return 0;
+
+    if (image->image_header.used_color_map_entries < 0 || image->image_header.significant_colors < 0)
+        return 0;
+
+    return 1;
+}
+
+
 void _read_pixels(int height, int width, struct PIXEL *pixels, FILE *input) {
     int subpixels_per_line = width * 3;
     int required_padding = (subpixels_per_line % 4) ? 4 - subpixels_per_line % 4 : 0;
@@ -28,8 +74,18 @@ struct Image *_read_image(FILE *input) {
     if (image == NULL)
         return NULL;
 
-    fread(&(image->file_header), 1, sizeof(struct FILE_HEADER), input);
-    fread(&(image->image_header), 1, sizeof(struct IMAGE_HEADER), input);
+    size_t bytes_read = fread(&(image->file_header), 1, sizeof(struct FILE_HEADER), input);
+
+    if (bytes_read != sizeof(struct FILE_HEADER))
+        return NULL;
+
+    bytes_read = fread(&(image->image_header), 1, sizeof(struct IMAGE_HEADER), input);
+
+    if (bytes_read != sizeof(struct IMAGE_HEADER))
+        return NULL;
+
+    if (_valid_headers(image) != 1)
+        return NULL;
 
     image->pixels = malloc(image->image_header.height * image->image_header.width * sizeof(struct PIXEL));
 
@@ -39,6 +95,12 @@ struct Image *_read_image(FILE *input) {
     fseek(input, image->file_header.image_data_offset, SEEK_SET);
 
     _read_pixels(image->image_header.height, image->image_header.width, image->pixels, input);
+
+    if (_valid_pixels(image) != 1)
+        return NULL;
+
+    if (image->file_header.bmp_size != sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER) + image->image_header.height * image->image_header.width * sizeof(struct PIXEL))
+        return NULL;
 
     return image;
 }
