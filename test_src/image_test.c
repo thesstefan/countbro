@@ -123,8 +123,6 @@ int read_non_existent_file() {
         return FAIL;
     }
 
-    delete_image(image);
-
     return SUCCESS;
 }
 
@@ -140,16 +138,30 @@ int read_corrupted_image(char *corrupted_bmp) {
     return SUCCESS;
 }
 
+int read_bad_permissions_file(char *filename) {
+    struct Image *image = read_image_from_file(filename);
 
-int read_image_test(char *filename, char *corrupted) {
+    if (image != NULL) {
+        delete_image(image);
+
+        return FAIL;
+    }
+
+    return SUCCESS;
+}
+
+int read_image_test(char *standard, char *corrupted, char *permissioned) {
 /*
     if (read_non_existent_file() != SUCCESS)
         return FAIL;
-*/
-    if (read_corrupted_image(corrupted) != SUCCESS)
+
+    if (read_bad_permissions_file(permissioned) != SUCCESS)
         return FAIL;
 
-    if (standard_read_image(filename) != SUCCESS)
+    if (read_corrupted_image(corrupted) != SUCCESS)
+        return FAIL;
+*/
+    if (standard_read_image(standard) != SUCCESS)
         return FAIL;
 
     return SUCCESS;
@@ -260,10 +272,10 @@ int main() {
     printf("\n\n");
 
     printf("read_image_from_file() test -> ");
-    evaluate(read_image_test("data/image_test_file", "data/corrupted_image_file"));
+    evaluate(read_image_test("data/standard", "data/corrupted", "data/permissioned"));
 
     printf("write_image_to_file() test -> ");
-    evaluate(write_image_test("data/image_test_file"));
+    evaluate(write_image_test("data/standard"));
 
     printf("\n\n");
 
