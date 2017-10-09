@@ -76,31 +76,49 @@ struct Image *_read_image(FILE *input) {
 
     size_t bytes_read = fread(&(image->file_header), 1, sizeof(struct FILE_HEADER), input);
 
-    if (bytes_read != sizeof(struct FILE_HEADER))
+    if (bytes_read != sizeof(struct FILE_HEADER)) {
+        delete_image(image);
+
         return NULL;
+    }
 
     bytes_read = fread(&(image->image_header), 1, sizeof(struct IMAGE_HEADER), input);
 
-    if (bytes_read != sizeof(struct IMAGE_HEADER))
-        return NULL;
+    if (bytes_read != sizeof(struct IMAGE_HEADER)) {
+        delete_image(image);
 
-    if (_valid_headers(image) != 1)
         return NULL;
+    }
+
+    if (_valid_headers(image) != 1) {
+        delete_image(image);
+        
+        return NULL;
+    }
 
     image->pixels = malloc(image->image_header.height * image->image_header.width * sizeof(struct PIXEL));
 
-    if (image->pixels == NULL)
+    if (image->pixels == NULL) {
+        delete_image(image);
+
         return NULL;
+    }
 
     fseek(input, image->file_header.image_data_offset, SEEK_SET);
 
     _read_pixels(image->image_header.height, image->image_header.width, image->pixels, input);
 
-    if (_valid_pixels(image) != 1)
-        return NULL;
+    if (_valid_pixels(image) != 1) {
+        delete_image(image);
 
-    if (image->file_header.bmp_size != sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER) + image->image_header.height * image->image_header.width * sizeof(struct PIXEL))
         return NULL;
+    }
+
+    if (image->file_header.bmp_size != sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER) + image->image_header.height * image->image_header.width * sizeof(struct PIXEL)) {
+        delete_image(image);
+
+        return NULL;
+    }
 
     return image;
 }
