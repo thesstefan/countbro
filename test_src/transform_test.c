@@ -41,6 +41,9 @@ int standard_to_grayscale_matrix(struct Image *image) {
 }
 
 int to_grayscale_matrix_test(struct Image *image) {
+    if (image == NULL)
+        return FAIL;
+
     if (no_image_to_grayscale_matrix() != SUCCESS)
         return FAIL;
 
@@ -94,6 +97,9 @@ int standard_from_grayscale_matrix(struct grayscale_image *grayscale, struct Ima
 }
 
 int from_grayscale_matrix_test(struct grayscale_image *grayscale, struct Image *image) {
+    if (grayscale == NULL || image == NULL)
+        return FAIL;
+    
     if (empty_image_from_grayscale_matrix(grayscale) != SUCCESS)
         return FAIL;
 
@@ -170,6 +176,9 @@ int standard_treshold(struct grayscale_image *grayscale, int treshold_constant) 
 }
 
 int treshold_test(struct grayscale_image *grayscale) {
+    if (grayscale == NULL)
+        return FAIL;
+
     if (empty_grayscale_treshold() != SUCCESS)
         return FAIL;
 
@@ -226,6 +235,9 @@ int standard_from_binary_to_grayscale_test(struct binary_image *binary) {
 }
                 
 int from_binary_to_grayscale_test(struct binary_image *binary) {
+    if (binary == NULL)
+        return FAIL;
+
     if (empty_binary_from_binary_to_grayscale() != SUCCESS)
         return FAIL;
 
@@ -234,11 +246,69 @@ int from_binary_to_grayscale_test(struct binary_image *binary) {
 
     return SUCCESS;
 }
-            
+
+struct grayscale_image *minimal_to_grayscale(struct Image *image) {
+    if (image == NULL)
+        return NULL;
+
+    struct grayscale_image *grayscale = malloc(sizeof(struct grayscale_image)); 
+
+    if (grayscale == NULL)
+        return NULL;
+    
+    grayscale->height = image->image_header.height;
+    grayscale->width = image->image_header.width;
+
+    grayscale->matrix = malloc(grayscale->width * grayscale->height * sizeof(unsigned char));
+
+    if (grayscale->matrix == NULL)
+        return NULL;
+
+    for (int height = 0; height < grayscale->height; height++)
+        for (int width = 0; width < grayscale->width; width++)
+            *(grayscale->matrix + height * grayscale->width + width) = brightness(image->pixels + height * image->image_header.width + width);
+
+    return grayscale;
+}
+
+struct binary_image *minimal_treshold(struct grayscale_image *grayscale, int treshold_constant) {
+    if (grayscale == NULL)
+        return NULL;
+
+    if (treshold_constant < 0 || treshold_constant > 255)
+        return NULL;
+
+    struct binary_image *binary = malloc(sizeof(struct binary_image));
+
+    if (binary == NULL)
+        return NULL;
+
+    binary->height = grayscale->height;
+    binary->width = grayscale->width;
+
+    binary->matrix = malloc(binary->height * binary->width * sizeof(enum binary_color));
+
+    if (binary->matrix == NULL)
+        return NULL;
+
+    for (int height = 0; height < binary->height; height++)
+        for (int width = 0; width < binary->width; width++)
+            if (*(grayscale->matrix + height * grayscale->width + width) < treshold_constant)
+                *(binary->matrix + height * binary->width + width) = WHITE;
+            else
+                *(binary->matrix + height * binary->width + width) = BLACK;
+
+    return binary;
+} 
+
 int main() {
     struct Image *image = read_image_from_file("data/standard");
-    struct grayscale_image *grayscale = to_grayscale_matrix(image);
-    struct binary_image *binary = treshold(grayscale, 100);
+
+    struct grayscale_image *grayscale = minimal_to_grayscale(image);
+    struct binary_image *binary = minimal_treshold(grayscale, 100);
+
+    if (grayscale == NULL || binary == NULL)
+        printf("Minimal implementations of transform functions failed\n");
 
     printf("to_grayscale_matrix() test -> ");
     evaluate(to_grayscale_matrix_test(image));
