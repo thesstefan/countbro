@@ -40,16 +40,27 @@ enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kerne
         return OUT;
     else
         return HIT;
-
 }
 
 struct Kernel *square_kernel(int size) {
+    if (size < 0 || size > KERNEL_MAX_SIZE)
+        return NULL;
+
     struct Kernel *kernel = malloc(sizeof(struct Kernel));
+
+    if (kernel == NULL)
+        return NULL;
 
     kernel->width = size;
     kernel->height = size;
 
     kernel->kernel = malloc(kernel->width * kernel->height * sizeof(char));
+
+    if (kernel->kernel == NULL) {
+        delete_kernel(kernel);
+
+        return NULL;
+    }
 
     for (int height = 0; height < kernel->height; height++)
         for (int width = 0; width < kernel->width; width++)
@@ -59,16 +70,28 @@ struct Kernel *square_kernel(int size) {
 }
 
 void delete_kernel(struct Kernel *kernel) {
+    if (kernel != NULL)
+        free(kernel->kernel);
+
     free(kernel);
 }
 
 struct binary_image *_copy_binary(struct binary_image *image) {
+    if (image == NULL)
+        return NULL;
+
     struct binary_image *copy = malloc(sizeof(struct binary_image));
+
+    if (copy == NULL)
+        return NULL;
 
     copy->height = image->height;
     copy->width = image->width;
 
     copy->matrix = malloc(copy->height * copy->width * sizeof(enum binary_color));
+
+    if (copy->matrix == NULL)
+        return NULL;
 
     for (int height = 0; height < copy->height; height++) {
         for (int width = 0; width < copy->width; width++) {
@@ -79,8 +102,14 @@ struct binary_image *_copy_binary(struct binary_image *image) {
     return copy;
 }
 
-void dilation(struct binary_image *image, struct Kernel *kernel) {
+int dilation(struct binary_image *image, struct Kernel *kernel) {
+    if (image == NULL || kernel == NULL)
+        return 0;
+
     struct binary_image *image_copy = _copy_binary(image);
+
+    if (image_copy == NULL)
+        return 0;
 
     for (int height = 0; height < image->height; height++)
         for (int width = 0; width < image->width; width++)
@@ -90,10 +119,19 @@ void dilation(struct binary_image *image, struct Kernel *kernel) {
                 }
             }
 
+    delete_binary(image_copy);
+    
+    return 1;
 }
 
-void erosion(struct binary_image *image, struct Kernel *kernel) {
+int erosion(struct binary_image *image, struct Kernel *kernel) {
+    if (image == NULL || kernel == NULL)
+        return 0;
+
     struct binary_image *image_copy = _copy_binary(image);
+
+    if (image_copy == NULL)
+        return 0;
 
     for (int height = 0; height < image->height; height++)
         for (int width = 0; width < image->width; width++)
@@ -102,14 +140,34 @@ void erosion(struct binary_image *image, struct Kernel *kernel) {
                     *(image->matrix + height * image->width + width) = BLACK;
                 }
             }
+
+    delete_binary(image_copy);
+
+    return 1;
 }
 
-void opening(struct binary_image *image, struct Kernel *kernel) {
-    dilation(image, kernel);
-    erosion(image, kernel);
+int opening(struct binary_image *image, struct Kernel *kernel) {
+    if (image == NULL || kernel == NULL)
+        return 0;
+
+    if (dilation(image, kernel) != 1)
+        return 0;
+
+    if (erosion(image, kernel) != 1)
+        return 0;
+
+    return 1;
 }
 
-void closing(struct binary_image *image, struct Kernel *kernel) {
-    erosion(image, kernel);
-    dilation(image, kernel);
+int closing(struct binary_image *image, struct Kernel *kernel) {
+    if (image == NULL || kernel == NULL)
+        return 0;
+
+    if (erosion(image, kernel) != 1)
+        return 0;
+
+    if (dilation(image, kernel) != 1)
+        return 0;
+
+    return 1;
 }

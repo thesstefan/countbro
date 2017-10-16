@@ -8,6 +8,8 @@
 #include "colors.h"
 #include "image.h"
 
+#define KERNEL_MAX_SIZE 100
+
 /**
  * @brief Representation of the kernel/structuring element used in morphological operations
  * 
@@ -79,7 +81,7 @@ void delete_kernel(struct Kernel *kernel);
  *
  * @return none
  */
-void erosion(struct binary_image *image, struct Kernel *kernel);
+int erosion(struct binary_image *image, struct Kernel *kernel);
 
 /**
  * @brief The implementation of erosion, fundamental morphological operation
@@ -98,7 +100,7 @@ void erosion(struct binary_image *image, struct Kernel *kernel);
  *
  * @return none
  */ 
-void dilation(struct binary_image *image, struct Kernel *kernel);
+int dilation(struct binary_image *image, struct Kernel *kernel);
 
 /**
  * @brief The implementation of opening, compound morphological operation
@@ -113,7 +115,7 @@ void dilation(struct binary_image *image, struct Kernel *kernel);
  *
  * @param kernel The structuring element used to apply the opening
  */
-void opening(struct binary_image *image, struct Kernel *kernel);
+int opening(struct binary_image *image, struct Kernel *kernel);
 
 /**
  * @brief The implementation of closing, compound morphological operation
@@ -127,4 +129,4 @@ void opening(struct binary_image *image, struct Kernel *kernel);
  *
  * @param kernel The structuring element used to apply the closing
  */
-void closing(struct binary_image *image, struct Kernel *kernel);
+int closing(struct binary_image *image, struct Kernel *kernel);
