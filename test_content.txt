@@ -1,0 +1,74 @@
+                                TESTS
+
+1. VECTOR
+    - vector_create()
+    - vector_add()
+    - vector_get()
+    - vector_set()
+    - vector_remove()
+
+2. SET
+    - set_create()
+    - set_cardinal()
+    - set_find()
+    - set_add()
+    - set_remove()
+    - set_equals()
+    - set_intersection()
+    - set_union()
+    - set_difference()
+
+3. IMAGE
+    - read_from_image()
+        -> without input file
+        -> with corrupted input file
+        -> with bad permissioned file
+        -> standard
+
+    - write_image_to_file()
+        -> without input image
+        -> standard
+
+4. TRANSFORM
+    - to_grayscale_matrix()
+        -> without input Image
+        -> standard
+
+    - from_grayscale_matrix()
+        -> without Image
+        -> without Grayscale
+        -> standard
+
+    - treshold()
+        -> without Grayscale
+        -> out of bounds constant
+        -> standard
+
+    - from_binary_to_grayscale
+        -> without Binary
+        -> standard
+
+5. MORPHOLOGY
+    - square_kernel()
+        -> out of bounds kernel size
+        -> standard
+
+    - dilation() 
+        -> without Kernel
+        -> without Binary
+        -> standard
+
+    - erosion() 
+        -> without Kernel
+        -> without Binary
+        -> standard
+
+    - opening() 
+        -> without Kernel
+        -> without Binary
+        -> standard
+
+    - closing() 
+        -> without Kernel
+        -> without Binary
+        -> standard
