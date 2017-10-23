@@ -105,9 +105,13 @@ void table_delete(struct Table *table) {
         }
 
         free(table->cells);
+
+        table->cells = NULL;
     }
 
     free(table);
+
+    table = NULL;
 }
 
 void table_print(struct Table *table) {

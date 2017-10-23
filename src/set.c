@@ -28,6 +28,8 @@ void set_delete(struct Set *set) {
         vector_free(set->representation);
 
     free(set);
+
+    set = NULL;
 }
 
 int set_cardinal(struct Set *set) {

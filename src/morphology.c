@@ -70,10 +70,15 @@ struct Kernel *square_kernel(int size) {
 }
 
 void delete_kernel(struct Kernel *kernel) {
-    if (kernel != NULL)
+    if (kernel != NULL) {
         free(kernel->kernel);
 
+        kernel->kernel = NULL;
+    }
+
     free(kernel);
+
+    kernel = NULL;
 }
 
 struct binary_image *_copy_binary(struct binary_image *image) {

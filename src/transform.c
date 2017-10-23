@@ -113,15 +113,25 @@ struct grayscale_image *from_binary_to_grayscale(struct binary_image *binary) {
 }
 
 void delete_grayscale(struct grayscale_image *grayscale) {
-    if (grayscale != NULL)
+    if (grayscale != NULL) {
         free(grayscale->matrix);
 
+        grayscale->matrix = NULL;
+    }
+
     free(grayscale);
+
+    grayscale = NULL;
 }
 
 void delete_binary(struct binary_image *binary) {
-    if (binary != NULL)
+    if (binary != NULL) {
         free(binary->matrix);
 
+        binary->matrix = NULL;
+    }
+
     free(binary);
+
+    binary = NULL;
 }

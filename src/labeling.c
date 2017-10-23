@@ -19,10 +19,15 @@ int *init_labels_matrix(int size) {
 }
 
 void delete_labels(struct Labels *labels) {
-    if (labels != NULL)
+    if (labels != NULL) {
         free(labels->matrix);
 
+        labels->matrix = NULL;
+    }
+
     free(labels);
+
+    labels = NULL;
 }
 
 struct Labels *init_labels(struct binary_image *image) {

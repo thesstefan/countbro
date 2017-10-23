@@ -104,8 +104,13 @@ int vector_remove(struct Vector *vector, int index) {
 }
 
 void vector_free(struct Vector *vector) {
-    if (vector != NULL)
+    if (vector != NULL) {
         free(vector->items);
 
+        vector->items = NULL;
+    }
+
     free(vector);
+
+    vector = NULL;
 }

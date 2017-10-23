@@ -183,8 +183,13 @@ int write_image_to_file(struct Image *image, char *filename) {
 }
 
 void delete_image(struct Image *image) {
-    if (image != NULL)
+    if (image != NULL) {
         free(image->pixels);
 
+        image->pixels = NULL;
+    }
+
     free(image);
+
+    image = NULL;
 }         
