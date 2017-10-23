@@ -151,7 +151,6 @@ int read_bad_permissions_file(char *filename) {
 }
 
 int read_image_test(char *standard, char *corrupted, char *permissioned) {
-/*
     if (read_non_existent_file() != SUCCESS)
         return FAIL;
 
@@ -160,7 +159,7 @@ int read_image_test(char *standard, char *corrupted, char *permissioned) {
 
     if (read_corrupted_image(corrupted) != SUCCESS)
         return FAIL;
-*/
+
     if (standard_read_image(standard) != SUCCESS)
         return FAIL;
 

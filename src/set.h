@@ -118,5 +118,7 @@ struct Set* set_union(struct Set *a, struct Set *b);
  */
 struct Set* set_difference(struct Set *a, struct Set *b);
 
+void print_set(struct Set *set);
+
 #endif
 

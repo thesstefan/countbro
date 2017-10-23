@@ -4,6 +4,7 @@
 #include "transform.h"
 #include "set.h"
 #include "labeling.h"
+#include "errors.h"
 
 int *init_labels_matrix(int size) {
     int *labels = malloc(sizeof(int) * size);
@@ -91,7 +92,11 @@ struct Labels *first_pass(struct binary_image *image, struct Table *table) {
                     return NULL;
 
                 if (set_cardinal(neighbors) == 0) {
-                    table_add_entry(table, set_create());
+                    struct Set *new_entry = set_create();
+
+                    set_add(new_entry, next_label);
+
+                    table_add_entry(table, new_entry);
 
                     *(labels->matrix + labels->width * height + width) = next_label;
  
@@ -101,23 +106,31 @@ struct Labels *first_pass(struct binary_image *image, struct Table *table) {
 
                     *(labels->matrix + labels->width * height + width) = label;
 
-                    int count = 0;
+                    for (int index = 1; index < next_label; index++)
+                        if (set_find(neighbors, index) == 0) {
+                            struct Set *entry = set_union(get_entry(table, index), neighbors);
 
-                    for (int index = 1; index < next_label && count <= set_cardinal(neighbors); index++)
-                        if (set_find(neighbors, index) == 0)
-                            table->cells[index] = set_union(table->cells[index], neighbors);
+//                            table_clear_entry(table, index);
 
+                            table_write_entry(table, index, entry);
+                        }
+
+
+// TO DO : FIND A BETTER WAY
                     for (int set_index = 1; set_index < next_label; set_index++) {
                         for (int index = 1; index < next_label; index++)
-                            if (set_find(table->cells[index], set_index) == 0) {
-                                table->cells[index] = set_union(table->cells[index], table->cells[set_index]);
+                            if (set_find(get_entry(table, index), set_index) == 0) {
+                                struct Set *entry = set_union(get_entry(table, index), get_entry(table, set_index));
 
-                                table->cells[set_index] = table->cells[index];
+//                                table_clear_entry(table, index);
+
+                                table_write_entry(table, index, entry);
                             }
                     }
 
-                    set_delete(neighbors);
+
                 }
+                    set_delete(neighbors);
             }
 
     return labels;
@@ -131,8 +144,9 @@ int find_entry(struct Table *table, int element) {
     return -1;
 }
 
-struct Labels *second_pass(struct binary_image *image, struct Labels *labels, struct Table *table) {
-    struct Set *labels_set = set_create();
+// TO DO : Find a way to return the unique labels set, while respecting SRP
+int second_pass(struct binary_image *image, struct Labels *labels, struct Table *table) {
+    struct Set *unique_labels = set_create();
     
     table_print(table);
 
@@ -141,14 +155,16 @@ struct Labels *second_pass(struct binary_image *image, struct Labels *labels, st
             if (*(image->matrix + image->width * height + width) != BLACK) {
                 int label = find_entry(table, *(labels->matrix + labels->width * height + width));
 
-                set_add(labels_set, label);
+                set_add(unique_labels, label);
 
                 *(labels->matrix + labels->width * height + width) = label;
             }
 
-    printf("NUMBER : %d\n", set_cardinal(labels_set));
+    int labels_count = set_cardinal(unique_labels);
 
-    return labels;
+    set_delete(unique_labels);
+
+    return labels_count;
 }
 
 struct Labels *labeling(struct binary_image *image) {
@@ -158,14 +174,17 @@ struct Labels *labeling(struct binary_image *image) {
     struct Table *table = table_create();
     table_add_entry(table, set_create());
 
-    struct Labels *temp_labels = first_pass(image, table);
+    struct Labels *labels = first_pass(image, table);
 
-    if (temp_labels == NULL)
+    if (labels == NULL)
         return NULL;
 
-    struct Labels *labels = second_pass(image, temp_labels, table);
+// TO DO : HANDLE BETTER
+    int count = second_pass(image, labels, table);
 
-    delete_labels(temp_labels);
+    printf("COUNT : %d\n", count);
+
+    table_delete(table);
 
     return labels;
 }

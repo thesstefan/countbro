@@ -14,7 +14,7 @@ struct Vector {
     int *items;
     int capacity;
     int size;
-};
+} __attribute__((__packed__));
 
 /**
  * @brief Create a new vector

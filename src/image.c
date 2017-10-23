@@ -1,4 +1,6 @@
 #include "image.h"
+#include <stdio.h>
+#include <errno.h>
 
 int _valid_pixels(struct Image *image) {
     for (int index = 0; index < image->image_header.width * image->image_header.height; index++)
@@ -24,9 +26,6 @@ int _valid_headers(struct Image *image) {
     if (image->file_header.bmp_size < sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER))
         return 0;
 
-    if (image->image_header.header_size != 40)
-        return 0;
-
     if (image->image_header.width <= 0 || image->image_header.height <= 0)
         return 0;
 
@@ -45,6 +44,14 @@ int _valid_headers(struct Image *image) {
     return 1;
 }
 
+/*
+int valid_image(struct Image *image) {
+    if (valid_headers(image) && valid_pixels(image))
+        return 1;
+
+    return 0;
+}
+*/
 
 void _read_pixels(int height, int width, struct PIXEL *pixels, FILE *input) {
     int subpixels_per_line = width * 3;
@@ -114,11 +121,13 @@ struct Image *_read_image(FILE *input) {
         return NULL;
     }
 
+    /*
     if (image->file_header.bmp_size != sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER) + image->image_header.height * image->image_header.width * sizeof(struct PIXEL)) {
         delete_image(image);
 
         return NULL;
     }
+    */
 
     return image;
 }

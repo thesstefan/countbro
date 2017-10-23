@@ -1,7 +1,7 @@
 #include "transform.h"
 
 unsigned char brightness(struct PIXEL *pixel) {
-    return (0.9 * pixel->red + 0.5 * pixel->green + 0.5 * pixel->blue);
+    return (0.9 * pixel->red + 0.05 * pixel->green + 0.05 * pixel->blue);
 }
 
 struct grayscale_image *to_grayscale_matrix(struct Image *image) {

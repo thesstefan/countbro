@@ -5,13 +5,25 @@
 #include "errors.h"
 
 struct Vector *vector_create() {
-    struct Vector *new_vector = malloc(sizeof(struct Vector));
+    struct Vector *vector = malloc(sizeof(struct Vector));
+    
+    if (vector == NULL) {
+        vector_free(vector);
 
-    new_vector->capacity = VECTOR_INIT_CAPACITY;
-    new_vector->size = 0;
-    new_vector->items = malloc(sizeof(int) * new_vector->capacity);
+        return NULL;
+    }
+    
+    vector->capacity = VECTOR_INIT_CAPACITY;
+    vector->size = 0;
+    vector->items = malloc(sizeof(int) * vector->capacity);
 
-    return new_vector;
+    if (vector->items == NULL) {
+        vector_free(vector);
+
+        return NULL;
+    }
+
+    return vector;
 }
 
 int vector_resize(struct Vector *vector, int capacity) {
@@ -92,6 +104,8 @@ int vector_remove(struct Vector *vector, int index) {
 }
 
 void vector_free(struct Vector *vector) {
-    free(vector->items);
+    if (vector != NULL)
+        free(vector->items);
+
     free(vector);
 }
