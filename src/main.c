@@ -42,7 +42,7 @@ void colorize(struct Image *image, struct Labels *labels) {
 }
 
 int main(int argc, char *argv[]) {
-    struct Image *image = read_image_from_file("/home/stefan/code/data/wow.bmp");
+    struct Image *image = read_image_from_file(argv[1]);
 
     struct grayscale_image *grayscale = to_grayscale_matrix(image);
 
@@ -50,26 +50,18 @@ int main(int argc, char *argv[]) {
 
     delete_grayscale(grayscale);
 
-    /*
     struct Kernel *opening_kernel = square_kernel(3);
     struct Kernel *closing_kernel = square_kernel(5);
 
     opening(binary, opening_kernel);
     closing(binary, closing_kernel);
-    */
 
     struct Labels *labels = labeling(binary);
 
-    //print_labels(labels);
-
-    /*
     delete_kernel(opening_kernel);
     delete_kernel(closing_kernel);
-    */
 
     // print_labels(labels);
-
-    // delete_labels(labels);
 
     struct grayscale_image *tresholded_grayscale = from_binary_to_grayscale(binary);
 
