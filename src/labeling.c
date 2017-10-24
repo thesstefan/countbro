@@ -1,9 +1,11 @@
 #include <ctype.h>
+
+#include "table.h"
 #include "transform.h"
 #include "set.h"
 #include "labeling.h"
 
-int *init_labels(int size) {
+int *init_labels_matrix(int size) {
     int *labels = malloc(sizeof(int) * size);
 
     if (labels == NULL)
@@ -15,41 +17,31 @@ int *init_labels(int size) {
     return labels;
 }
 
-struct Labels *init_label_list(struct binary_image *image) {
-    struct Labels *new_label_list = malloc(sizeof(struct Labels));
+void delete_labels(struct Labels *labels) {
+    if (labels != NULL)
+        free(labels->matrix);
 
-    if (new_label_list == NULL)
-        return NULL;
-
-    new_label_list->height = image->height;
-    new_label_list->width = image->width;
-
-    new_label_list->matrix = init_labels(image->height * image->width);
-
-    if (new_label_list->matrix == NULL)
-        return NULL;
-
-    return new_label_list;
+    free(labels);
 }
 
-int print_set(struct Set *set) {
-    int count = 0;
+struct Labels *init_labels(struct binary_image *image) {
+    struct Labels *new_labels = malloc(sizeof(struct Labels));
 
-    if (set == NULL)
-        return -1;
+    if (new_labels == NULL)
+        return NULL;
 
-    printf("SET : ");
+    new_labels->height = image->height;
+    new_labels->width = image->width;
 
-    for (int index = 0; index < MAX_SETS && count <= set_cardinal(set); index++) 
-        if (set_find(set, index) == 0) {
-            printf("%d ", index);
+    new_labels->matrix = init_labels_matrix(image->height * image->width);
 
-            count++;
-        }
+    if (new_labels->matrix == NULL) {
+        delete_labels(new_labels);
 
-    return 0;
+        return NULL;
+    }
 
-    printf("\n");
+    return new_labels;
 }
 
 struct Set *get_neighbors(struct Labels *labels, int y, int x) {
@@ -74,18 +66,18 @@ struct Set *get_neighbors(struct Labels *labels, int y, int x) {
     return neighbors;
 }
 
-int min(struct Set *neighbors) {
-    if (set_cardinal(neighbors) != 0)
-        for (int index = 1; index < MAX_LABELS; index++)
-            if (set_find(neighbors, index) == 0)
+int set_min(struct Set *set) {
+    if (set_cardinal(set) != 0)
+        for (int index = 0; index < MAX_LABELS; index++)
+            if (set_find(set, index) == 0)
                 return index;
 
     return 0;
 }
 
-struct Labels *first_pass(struct binary_image *image, struct Set *set_list[MAX_SETS]) {
+struct Labels *first_pass(struct binary_image *image, struct Table *table) {
     int next_label = 1; 
-    struct Labels *labels = init_label_list(image);
+    struct Labels *labels = init_labels(image);
 
     if (labels == NULL)
         return NULL;
@@ -99,60 +91,59 @@ struct Labels *first_pass(struct binary_image *image, struct Set *set_list[MAX_S
                     return NULL;
 
                 if (set_cardinal(neighbors) == 0) {
-                    set_list[next_label] = set_create();
+                    table_add_entry(table, set_create());
 
                     *(labels->matrix + labels->width * height + width) = next_label;
  
                     next_label++;
                 } else {
-                    int label = min(neighbors);
-
-                    //print_set(neighbors);
+                    int label = set_min(neighbors);
 
                     *(labels->matrix + labels->width * height + width) = label;
 
                     int count = 0;
 
-                    for (int index = 1; index < next_label && count <= set_cardinal(neighbors); index++) {
-                        if (set_find(neighbors, index) == 0) {
-                            set_list[index] = set_union(set_list[index], neighbors); 
-                        }
-                    }
+                    for (int index = 1; index < next_label && count <= set_cardinal(neighbors); index++)
+                        if (set_find(neighbors, index) == 0)
+                            table->cells[index] = set_union(table->cells[index], neighbors);
 
                     for (int set_index = 1; set_index < next_label; set_index++) {
                         for (int index = 1; index < next_label; index++)
-                            if (set_find(set_list[index], set_index) == 0) {
-                                set_list[index] = set_union(set_list[index], set_list[set_index]);
-                                set_list[set_index] = set_union(set_list[index], set_list[set_index]);
+                            if (set_find(table->cells[index], set_index) == 0) {
+                                table->cells[index] = set_union(table->cells[index], table->cells[set_index]);
+
+                                table->cells[set_index] = table->cells[index];
                             }
                     }
+
+                    set_delete(neighbors);
                 }
             }
 
     return labels;
 }
 
-int find_set_index(struct Set *set_list[MAX_SETS], int element) {
-    for (int index = 1; index < MAX_SETS; index++)
-        if (set_find(set_list[index], element) == 0)
+int find_entry(struct Table *table, int element) {
+    for (int index = 1; index < table->size; index++)
+        if (set_find(table->cells[index], element) == 0)
             return index;
 
     return -1;
 }
 
-struct Labels *second_pass(struct binary_image *image, struct Labels *labels, struct Set *set_list[MAX_SETS]) {
-//    for (int index = 1; print_set(set_list[index]) != -1; index++);
-
+struct Labels *second_pass(struct binary_image *image, struct Labels *labels, struct Table *table) {
     struct Set *labels_set = set_create();
+    
+    table_print(table);
 
     for (int height = 0; height < image->height; height++)
         for (int width = 0; width < image->width; width++)
             if (*(image->matrix + image->width * height + width) != BLACK) {
-                int my_label = find_set_index(set_list, *(labels->matrix + labels->width * height + width));
+                int label = find_entry(table, *(labels->matrix + labels->width * height + width));
 
-                set_add(labels_set, my_label);
+                set_add(labels_set, label);
 
-                *(labels->matrix + labels->width * height + width) = my_label;
+                *(labels->matrix + labels->width * height + width) = label;
             }
 
     printf("NUMBER : %d\n", set_cardinal(labels_set));
@@ -164,14 +155,17 @@ struct Labels *labeling(struct binary_image *image) {
     if (image == NULL)
         return NULL;
 
-    struct Set *set_list[MAX_SETS];
+    struct Table *table = table_create();
+    table_add_entry(table, set_create());
 
-    struct Labels *temp_labels = first_pass(image, set_list);
+    struct Labels *temp_labels = first_pass(image, table);
 
     if (temp_labels == NULL)
         return NULL;
 
-    struct Labels *labels = second_pass(image, temp_labels, set_list);
+    struct Labels *labels = second_pass(image, temp_labels, table);
+
+    delete_labels(temp_labels);
 
     return labels;
 }
