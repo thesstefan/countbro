@@ -1,11 +1,12 @@
 #include "colors.h"
 #include "morphology.h"
+#include "errors.h"
 
 #define min(a,b) ((a) < (b)) ? (a) : (b)
 #define max(a,b) ((a) > (b)) ? (a) : (b)
 #define bound(a, b, c) (max(min(a, c), b))
 
-enum kernel_state _check_kernel(struct binary_image *image, struct Kernel *kernel, int x, int y) {
+enum kernel_state _check_kernel(struct Binary *image, struct Kernel *kernel, int x, int y) {
     int kernel_width_index = 0;
     int kernel_height_index = 0;
 
@@ -81,11 +82,11 @@ void delete_kernel(struct Kernel *kernel) {
     kernel = NULL;
 }
 
-struct binary_image *_copy_binary(struct binary_image *image) {
+struct Binary *_copy_binary(struct Binary *image) {
     if (image == NULL)
         return NULL;
 
-    struct binary_image *copy = malloc(sizeof(struct binary_image));
+    struct Binary *copy = malloc(sizeof(struct Binary));
 
     if (copy == NULL)
         return NULL;
@@ -107,14 +108,14 @@ struct binary_image *_copy_binary(struct binary_image *image) {
     return copy;
 }
 
-int dilation(struct binary_image *image, struct Kernel *kernel) {
+int dilation(struct Binary *image, struct Kernel *kernel) {
     if (image == NULL || kernel == NULL)
-        return 0;
+        return NULL_ERROR;
 
-    struct binary_image *image_copy = _copy_binary(image);
+    struct Binary *image_copy = _copy_binary(image);
 
     if (image_copy == NULL)
-        return 0;
+        return NULL_ERROR;
 
     for (int height = 0; height < image->height; height++)
         for (int width = 0; width < image->width; width++)
@@ -126,17 +127,17 @@ int dilation(struct binary_image *image, struct Kernel *kernel) {
 
     delete_binary(image_copy);
     
-    return 1;
+    return SUCCESS;
 }
 
-int erosion(struct binary_image *image, struct Kernel *kernel) {
+int erosion(struct Binary *image, struct Kernel *kernel) {
     if (image == NULL || kernel == NULL)
-        return 0;
+        return NULL_ERROR;
 
-    struct binary_image *image_copy = _copy_binary(image);
+    struct Binary *image_copy = _copy_binary(image);
 
     if (image_copy == NULL)
-        return 0;
+        return NULL_ERROR;
 
     for (int height = 0; height < image->height; height++)
         for (int width = 0; width < image->width; width++)
@@ -148,31 +149,31 @@ int erosion(struct binary_image *image, struct Kernel *kernel) {
 
     delete_binary(image_copy);
 
-    return 1;
+    return SUCCESS;
 }
 
-int opening(struct binary_image *image, struct Kernel *kernel) {
+int opening(struct Binary *image, struct Kernel *kernel) {
     if (image == NULL || kernel == NULL)
-        return 0;
+        return NULL_ERROR;
 
-    if (dilation(image, kernel) != 1)
-        return 0;
+    if (dilation(image, kernel) != SUCCESS)
+        return FAIL;
 
-    if (erosion(image, kernel) != 1)
-        return 0;
+    if (erosion(image, kernel) != SUCCESS)
+        return FAIL;
 
-    return 1;
+    return SUCCESS;
 }
 
-int closing(struct binary_image *image, struct Kernel *kernel) {
+int closing(struct Binary *image, struct Kernel *kernel) {
     if (image == NULL || kernel == NULL)
-        return 0;
+        return NULL_ERROR;
 
-    if (erosion(image, kernel) != 1)
-        return 0;
+    if (erosion(image, kernel) != SUCCESS)
+        return FAIL;
 
-    if (dilation(image, kernel) != 1)
-        return 0;
+    if (dilation(image, kernel) != SUCCESS)
+        return FAIL;
 
-    return 1;
+    return SUCCESS;
 }

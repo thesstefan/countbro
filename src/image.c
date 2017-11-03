@@ -1,6 +1,7 @@
 #include "image.h"
+#include "errors.h"
+
 #include <stdio.h>
-#include <errno.h>
 
 int _valid_pixels(struct Image *image) {
     for (int index = 0; index < image->image_header.width * image->image_header.height; index++)
@@ -23,7 +24,7 @@ int _valid_headers(struct Image *image) {
     if (image->file_header.file_marker_1 != 'B' || image->file_header.file_marker_2 != 'M')
         return 0;
 
-    if (image->file_header.bmp_size < sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER))
+    if (image->file_header.bmp_size < sizeof(struct FileHeader) + sizeof(struct ImageHeader))
         return 0;
 
     if (image->image_header.width <= 0 || image->image_header.height <= 0)
@@ -44,33 +45,24 @@ int _valid_headers(struct Image *image) {
     return 1;
 }
 
-/*
-int valid_image(struct Image *image) {
-    if (valid_headers(image) && valid_pixels(image))
-        return 1;
-
-    return 0;
-}
-*/
-
-void _read_pixels(int height, int width, struct PIXEL *pixels, FILE *input) {
+void _read_pixels(int height, int width, struct Pixel *pixels, FILE *input) {
     int subpixels_per_line = width * 3;
     int required_padding = (subpixels_per_line % 4) ? 4 - subpixels_per_line % 4 : 0;
     int padding_dump = 0;
 
     for (int height_index = height - 1; height_index >= 0; height_index--) {
-        fread(pixels + height_index * width, sizeof(struct PIXEL), width, input);
+        fread(pixels + height_index * width, sizeof(struct Pixel), width, input);
         fread(&padding_dump, sizeof(unsigned char), required_padding, input);
     }
 }
 
-void _write_pixels(int height, int width, struct PIXEL *pixels, FILE *output) {
+void _write_pixels(int height, int width, struct Pixel *pixels, FILE *output) {
     int subpixels_per_line = width * 3;
     int required_padding = (subpixels_per_line % 4) ? 4 - subpixels_per_line % 4 : 0;
     int padding_dump = 0;
 
     for (int height_index = height - 1; height_index >= 0; height_index--) {
-        fwrite(pixels + height_index * width, sizeof(struct PIXEL), width, output);
+        fwrite(pixels + height_index * width, sizeof(struct Pixel), width, output);
         fwrite(&padding_dump, 1, required_padding, output);
     }
 }
@@ -81,17 +73,17 @@ struct Image *_read_image(FILE *input) {
     if (image == NULL)
         return NULL;
 
-    size_t bytes_read = fread(&(image->file_header), 1, sizeof(struct FILE_HEADER), input);
+    size_t bytes_read = fread(&(image->file_header), 1, sizeof(struct FileHeader), input);
 
-    if (bytes_read != sizeof(struct FILE_HEADER)) {
+    if (bytes_read != sizeof(struct FileHeader)) {
         delete_image(image);
 
         return NULL;
     }
 
-    bytes_read = fread(&(image->image_header), 1, sizeof(struct IMAGE_HEADER), input);
+    bytes_read = fread(&(image->image_header), 1, sizeof(struct ImageHeader), input);
 
-    if (bytes_read != sizeof(struct IMAGE_HEADER)) {
+    if (bytes_read != sizeof(struct ImageHeader)) {
         delete_image(image);
 
         return NULL;
@@ -103,7 +95,7 @@ struct Image *_read_image(FILE *input) {
         return NULL;
     }
 
-    image->pixels = malloc(image->image_header.height * image->image_header.width * sizeof(struct PIXEL));
+    image->pixels = malloc(image->image_header.height * image->image_header.width * sizeof(struct Pixel));
 
     if (image->pixels == NULL) {
         delete_image(image);
@@ -121,20 +113,12 @@ struct Image *_read_image(FILE *input) {
         return NULL;
     }
 
-    /*
-    if (image->file_header.bmp_size != sizeof(struct FILE_HEADER) + sizeof(struct IMAGE_HEADER) + image->image_header.height * image->image_header.width * sizeof(struct PIXEL)) {
-        delete_image(image);
-
-        return NULL;
-    }
-    */
-
     return image;
 }
 
 void _write_image(struct Image *image, FILE *output) {
-    fwrite(&(image->file_header), 1, sizeof(struct FILE_HEADER), output);
-    fwrite(&(image->image_header), 1, sizeof(struct IMAGE_HEADER), output);
+    fwrite(&(image->file_header), 1, sizeof(struct FileHeader), output);
+    fwrite(&(image->image_header), 1, sizeof(struct ImageHeader), output);
 
     int padding_dump = 0;
     int gap = image->file_header.image_data_offset - 54;
@@ -161,25 +145,25 @@ struct Image *read_image_from_file(char *filename) {
     return image;
 }
 
-int write_image_to_file(struct Image *image, char *filename) {
-    FILE *output = fopen(filename, "wb");
+int write_image_to_file(struct Image *image, char *file_name) {
+    FILE *output = fopen(file_name, "wb");
 
     if (output == NULL) {
         fclose(output);
 
-        return -1;
+        return FAIL;
     }
 
     if (image == NULL) {
         fclose(output);
 
-        return -1;
+        return FAIL;
     }
 
     _write_image(image, output);
     fclose(output);
 
-    return 0;
+    return SUCCESS;
 }
 
 void delete_image(struct Image *image) {

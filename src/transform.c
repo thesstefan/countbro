@@ -1,14 +1,15 @@
 #include "transform.h"
 
-unsigned char brightness(struct PIXEL *pixel) {
-    return (0.9 * pixel->red + 0.05 * pixel->green + 0.05 * pixel->blue);
+unsigned char brightness(struct Pixel *pixel) {
+    //return (0.9 * pixel->red + 0.05 * pixel->green + 0.05 * pixel->blue);
+    return (0.33 * pixel->red + 0.33 * pixel->green + 0.33 * pixel->blue);
 }
 
-struct grayscale_image *to_grayscale_matrix(struct Image *image) {
+struct Grayscale *to_grayscale_matrix(struct Image *image) {
     if (image == NULL)
         return NULL;
 
-    struct grayscale_image *grayscale = malloc(sizeof(struct grayscale_image)); 
+    struct Grayscale *grayscale = malloc(sizeof(struct Grayscale)); 
 
     if (grayscale == NULL)
         return NULL;
@@ -28,12 +29,12 @@ struct grayscale_image *to_grayscale_matrix(struct Image *image) {
     return grayscale;
 }
 
-int from_grayscale_matrix(struct grayscale_image *grayscale, struct Image *image) {
+int from_grayscale_matrix(struct Grayscale *grayscale, struct Image *image) {
     if (grayscale == NULL)
-        return 0;
+        return NULL_ERROR;
 
     if (image == NULL)
-        return 0;
+        return NULL_ERROR;
 
     for (int height = 0; height < image->image_header.height; height++) {
         for (int width = 0; width < image->image_header.width; width++) {
@@ -49,17 +50,17 @@ int from_grayscale_matrix(struct grayscale_image *grayscale, struct Image *image
         }
     }
 
-    return 1;
+    return SUCCESS;
 }
 
-struct binary_image *treshold(struct grayscale_image *grayscale, int treshold_constant) {
+struct Binary *threshold(struct Grayscale *grayscale, int threshold_constant) {
     if (grayscale == NULL)
         return NULL;
 
-    if (treshold_constant < 0 || treshold_constant > 255)
+    if (threshold_constant < 0 || threshold_constant > 255)
         return NULL;
 
-    struct binary_image *binary = malloc(sizeof(struct binary_image));
+    struct Binary *binary = malloc(sizeof(struct Binary));
 
     if (binary == NULL)
         return NULL;
@@ -74,7 +75,7 @@ struct binary_image *treshold(struct grayscale_image *grayscale, int treshold_co
 
     for (int height = 0; height < binary->height; height++)
         for (int width = 0; width < binary->width; width++)
-            if (*(grayscale->matrix + height * grayscale->width + width) < treshold_constant)
+            if (*(grayscale->matrix + height * grayscale->width + width) < threshold_constant)
                 *(binary->matrix + height * binary->width + width) = WHITE;
             else
                 *(binary->matrix + height * binary->width + width) = BLACK;
@@ -82,11 +83,11 @@ struct binary_image *treshold(struct grayscale_image *grayscale, int treshold_co
     return binary;
 } 
 
-struct grayscale_image *from_binary_to_grayscale(struct binary_image *binary) {
+struct Grayscale *from_binary_to_grayscale(struct Binary *binary) {
     if (binary == NULL)
         return NULL;
 
-    struct grayscale_image *grayscale = malloc(sizeof(struct grayscale_image));
+    struct Grayscale *grayscale = malloc(sizeof(struct Grayscale));
 
     if (grayscale == NULL)
         return NULL;
@@ -112,7 +113,7 @@ struct grayscale_image *from_binary_to_grayscale(struct binary_image *binary) {
     return grayscale;
 }
 
-void delete_grayscale(struct grayscale_image *grayscale) {
+void delete_grayscale(struct Grayscale *grayscale) {
     if (grayscale != NULL) {
         free(grayscale->matrix);
 
@@ -124,7 +125,7 @@ void delete_grayscale(struct grayscale_image *grayscale) {
     grayscale = NULL;
 }
 
-void delete_binary(struct binary_image *binary) {
+void delete_binary(struct Binary *binary) {
     if (binary != NULL) {
         free(binary->matrix);
 

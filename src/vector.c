@@ -8,7 +8,7 @@ struct Vector *vector_create() {
     struct Vector *vector = malloc(sizeof(struct Vector));
     
     if (vector == NULL) {
-        vector_free(vector);
+        vector_delete(vector);
 
         return NULL;
     }
@@ -18,7 +18,7 @@ struct Vector *vector_create() {
     vector->items = malloc(sizeof(int) * vector->capacity);
 
     if (vector->items == NULL) {
-        vector_free(vector);
+        vector_delete(vector);
 
         return NULL;
     }
@@ -40,7 +40,7 @@ int vector_resize(struct Vector *vector, int capacity) {
 
 int vector_add(struct Vector *vector, int item) {
     if (vector == NULL)
-        return NULL_VECTOR;
+        return NULL_ERROR;
 
     if (vector->capacity == vector->size) {
         if (vector_resize(vector, vector->capacity * 2) != SUCCESS)
@@ -55,7 +55,7 @@ int vector_add(struct Vector *vector, int item) {
 
 int vector_set(struct Vector *vector, int index, int item) {
     if (vector == NULL)
-        return NULL_VECTOR;
+        return NULL_ERROR;
 
     if (index < 0 || index >= vector->size)
         return OUT_OF_BOUNDS;
@@ -67,10 +67,10 @@ int vector_set(struct Vector *vector, int index, int item) {
 
 int vector_get(struct Vector *vector, int index, int *value) {
     if (vector == NULL)
-        return NULL_VECTOR;
+        return NULL_ERROR;
 
     if (vector->size == 0)
-        return EMPTY_VECTOR;
+        return EMPTY_ERROR;
 
     if (index < 0 || index >= vector->size) 
         return OUT_OF_BOUNDS;
@@ -82,10 +82,10 @@ int vector_get(struct Vector *vector, int index, int *value) {
 
 int vector_remove(struct Vector *vector, int index) {
     if (vector == NULL)
-        return NULL_VECTOR;
+        return NULL_ERROR;
 
     if (vector->size == 0)
-        return EMPTY_VECTOR;
+        return EMPTY_ERROR;
 
     if (index < 0 || index >= vector->size)
         return OUT_OF_BOUNDS;
@@ -103,7 +103,7 @@ int vector_remove(struct Vector *vector, int index) {
     return SUCCESS;
 }
 
-void vector_free(struct Vector *vector) {
+void vector_delete(struct Vector *vector) {
     if (vector != NULL) {
         free(vector->items);
 

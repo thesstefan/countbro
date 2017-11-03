@@ -1,9 +1,11 @@
 #include <ctype.h>
 
-#include "table.h"
-#include "transform.h"
 #include "set.h"
-#include "labeling.h"
+#include "table.h"
+
+#include "transform.h"
+#include "labelling.h"
+
 #include "errors.h"
 
 int *init_labels_matrix(int size) {
@@ -30,7 +32,7 @@ void delete_labels(struct Labels *labels) {
     labels = NULL;
 }
 
-struct Labels *init_labels(struct binary_image *image) {
+struct Labels *init_labels(struct Binary *image) {
     struct Labels *new_labels = malloc(sizeof(struct Labels));
 
     if (new_labels == NULL)
@@ -75,13 +77,13 @@ struct Set *get_neighbors(struct Labels *labels, int y, int x) {
 int set_min(struct Set *set) {
     if (set_cardinal(set) != 0)
         for (int index = 0; index < MAX_LABELS; index++)
-            if (set_find(set, index) == 0)
+            if (set_find(set, index) == FOUND)
                 return index;
 
     return 0;
 }
 
-struct Labels *first_pass(struct binary_image *image, struct Table *table) {
+struct Labels *first_pass(struct Binary *image, struct Table *table) {
     int next_label = 1; 
     struct Labels *labels = init_labels(image);
 
@@ -111,20 +113,29 @@ struct Labels *first_pass(struct binary_image *image, struct Table *table) {
 
                     *(labels->matrix + labels->width * height + width) = label;
 
-                    for (int index = 1; index < next_label; index++)
-                        if (set_find(neighbors, index) == 0) {
+                    int count = 0;
+
+                    for (int index = 1; index < next_label && count < set_cardinal(neighbors); index++)
+                        if (set_find(neighbors, index) == FOUND) {
                             struct Set *entry = set_union(get_entry(table, index), neighbors);
 
 //                            table_clear_entry(table, index);
 
                             table_write_entry(table, index, entry);
+
+                            count++;
+
                         }
+
+                    set_delete(neighbors);
+                }
+            }
 
 
 // TO DO : FIND A BETTER WAY
                     for (int set_index = 1; set_index < next_label; set_index++) {
                         for (int index = 1; index < next_label; index++)
-                            if (set_find(get_entry(table, index), set_index) == 0) {
+                            if (set_find(get_entry(table, index), set_index) == FOUND) {
                                 struct Set *entry = set_union(get_entry(table, index), get_entry(table, set_index));
 
 //                                table_clear_entry(table, index);
@@ -132,29 +143,22 @@ struct Labels *first_pass(struct binary_image *image, struct Table *table) {
                                 table_write_entry(table, index, entry);
                             }
                     }
-
-
-                }
-                    set_delete(neighbors);
-            }
-
+    
     return labels;
 }
 
 int find_entry(struct Table *table, int element) {
     for (int index = 1; index < table->size; index++)
-        if (set_find(table->cells[index], element) == 0)
+        if (set_find(table->cells[index], element) == FOUND)
             return index;
 
     return -1;
 }
 
 // TO DO : Find a way to return the unique labels set, while respecting SRP
-int second_pass(struct binary_image *image, struct Labels *labels, struct Table *table) {
+int second_pass(struct Binary *image, struct Labels *labels, struct Table *table) {
     struct Set *unique_labels = set_create();
     
-    table_print(table);
-
     for (int height = 0; height < image->height; height++)
         for (int width = 0; width < image->width; width++)
             if (*(image->matrix + image->width * height + width) != BLACK) {
@@ -172,7 +176,7 @@ int second_pass(struct binary_image *image, struct Labels *labels, struct Table 
     return labels_count;
 }
 
-struct Labels *labeling(struct binary_image *image) {
+struct Labels *labelling(struct Binary *image) {
     if (image == NULL)
         return NULL;
 

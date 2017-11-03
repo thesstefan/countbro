@@ -25,7 +25,7 @@ struct Set *set_create() {
 
 void set_delete(struct Set *set) {
     if (set != NULL)
-        vector_free(set->representation);
+        vector_delete(set->representation);
 
     free(set);
 
@@ -34,110 +34,110 @@ void set_delete(struct Set *set) {
 
 int set_cardinal(struct Set *set) {
     if (set == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set->representation == NULL)
-        return -1;
+        return NULL_ERROR;
 
     return set->representation->size;
 }
 
 int set_find(struct Set *set, int item) {
     if (set == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set->representation == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set_cardinal(set) == 0)
-        return 1;
+        return NOT_FOUND;
 
     for (int index = 0; index < set_cardinal(set); index++) {
         int value = 0;
 
         if (vector_get(set->representation, index, &value) != SUCCESS)
-            return -1;
+            return FAIL;
 
         if (item == value)
-            return 0;
+            return FOUND;
     }
 
-    return 1;
+    return NOT_FOUND;
 }
 
 int set_add(struct Set *set, int item) {
     if (set == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set->representation == NULL)
-        return -1;
+        return NULL_ERROR;
 
-    if (set_find(set, item) == SUCCESS)
-        return 1;
+    if (set_find(set, item) == FOUND)
+        return FOUND;
 
     if (vector_add(set->representation, item) != SUCCESS)
-        return -1;
+        return FAIL;
 
-    return 0;
+    return SUCCESS;
 }
 
 int set_remove(struct Set *set, int item) {
     if (set == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set->representation == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set_cardinal(set) == 0)
-        return -1;
+        return EMPTY_ERROR;
 
-    if (set_find(set, item) != 0)
-        return 1;
+    if (set_find(set, item) != FOUND)
+        return NOT_FOUND;
 
     for (int index = 0; index < set->representation->size; index++) {
         int value = 0;
 
         if (vector_get(set->representation, index, &value) != SUCCESS)
-            return -1;
+            return FAIL;
 
         if (item == value) {
             if (vector_remove(set->representation, index) != SUCCESS)
-                return -1;
+                return FAIL;
 
-            return 0;
+            return SUCCESS;
         }
     }
-    
-    return -1;
+
+    return FAIL;
 }
 
 int set_equals(struct Set *a, struct Set *b) {
     if (a == NULL) 
-        return -1;
+        return NULL_ERROR;
 
     if (b == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (a->representation == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (b->representation == NULL)
-        return -1;
+        return NULL_ERROR;
 
     if (set_cardinal(a) != set_cardinal(b))
-        return 1;
+        return NOT_FOUND;
         
     for (int index = 0; index < set_cardinal(a); index++) {
         int value = 0;
         
         if (vector_get(a->representation, index, &value) != SUCCESS)
-            return -1;
+            return FAIL;
 
-        if (set_find(b, value) != 0)
-            return 1;
+        if (set_find(b, value) != FOUND)
+            return NOT_FOUND;
     }
 
-    return 0;
+    return FOUND;
 }
 
 struct Set *set_intersection(struct Set *a, struct Set *b) {
@@ -164,8 +164,8 @@ struct Set *set_intersection(struct Set *a, struct Set *b) {
             return NULL;
         }
 
-        if (set_find(b, value) == 0)
-            if (set_add(intersection, value) == -1) {
+        if (set_find(b, value) == FOUND)
+            if (set_add(intersection, value) < SUCCESS) {
                 set_delete(intersection);
 
                 return NULL;
@@ -202,7 +202,7 @@ struct Set *set_union(struct Set *a, struct Set *b) {
             return NULL;
         }
 
-        if (set_add(union_set, value) == -1) {
+        if (set_add(union_set, value) < SUCCESS) {
             set_delete(union_set);
             
             return NULL;
@@ -218,7 +218,7 @@ struct Set *set_union(struct Set *a, struct Set *b) {
             return NULL;
         }
 
-        if (set_add(union_set, value) == -1) {
+        if (set_add(union_set, value) < SUCCESS) {
             set_delete(union_set);
         
             return NULL;
@@ -252,8 +252,8 @@ struct Set *set_difference(struct Set *a, struct Set *b) {
             return NULL;
         }
 
-        if (set_find(b, value) == 1)
-            if (set_add(difference, value) == -1) {
+        if (set_find(b, value) == FOUND)
+            if (set_add(difference, value) < SUCCESS) {
                 set_delete(difference);
 
                 return NULL;
@@ -261,11 +261,4 @@ struct Set *set_difference(struct Set *a, struct Set *b) {
     }
 
     return difference;
-}
-
-void print_set(struct Set *set) {
-    if (set != NULL) {
-        for (int index = 0; index < set->representation->size; index++)
-            printf("%d ", set->representation->items[index]);
-    }
 }
