@@ -2,12 +2,19 @@
 #include "labelling.h"
 #include "colorize.h"
 
-const struct Pixel color[COLORS_NUMBER] = {{255, 0, 0}, // RED
-                                           {0, 255, 0}, // LIME
-                                           {0, 0, 255}, // BLUE
-                                           {255, 0, 255}, // YELLOW
-                                           {0, 255, 255}, // CYAN
-                                           {255, 0, 255}, // MAGENTA
+const struct Pixel color[COLORS_NUMBER] = {{255, 0, 0},   
+                                           {0, 255, 0},   
+                                           {0, 0, 255},   
+                                           {255, 0, 255}, 
+                                           {0, 255, 255},
+                                           {255, 0, 255},
+                                           {255, 255, 0}, 
+                                           {128, 0, 0},
+                                           {0, 128, 0},
+                                           {0, 0, 128},
+                                           {128, 0, 128},
+                                           {0, 128, 128},
+                                           {128, 128, 0}
 };
 
 struct Pixel get_color(int number) {

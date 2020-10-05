@@ -11,7 +11,7 @@
 #include "labelling.h"
 
 /** @brief The number of colors used to colorize */
-#define COLORS_NUMBER 6
+#define COLORS_NUMBER 13
 
 /** 
  * @brief Function which colorizes shapes of an Image, a Labels structure being given.
