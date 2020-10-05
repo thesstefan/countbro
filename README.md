@@ -38,7 +38,7 @@ git clone https://github.com/thesstefan/count_bro.git
 
 # Examples:
 
-1. Counting and detection of stars using [main_sky.c](https://github.com/thesstefan/count_bro/master/extra/main_sky.c) as source
+1. Counting (1033) and detection of stars using [main_sky.c](https://github.com/thesstefan/count_bro/master/extra/main_sky.c) as source
 and [sky_input.bmp](https://github.com/thesstefan/count_bro/blob/master/data/sky_input.bmp) as input.
 
 <p align="center">
@@ -52,7 +52,7 @@ and [coins_input.bmp](https://github.com/thesstefan/count_bro/blob/master/data/c
   <img src="https://github.com/thesstefan/Cell-Counter/blob/master/extra/coins_process.gif" alt="Coins GIF"/>
 </p>
 
-3. Counting and detection (~40, overlapping cells errors) of blood cells in a scan (the original purpose of the project), using 
+3. Counting and detection (~184 with overlapping cells errors) of blood cells in a scan (the original purpose of the project), using 
 [main_cells.c](https://github.com/thesstefan/count_bro/blob/master/extra/main_cells.c) as source and 
 [cells_input.bmp](https://github.com/thesstefan/count_bro/blob/master/data/cells_input.bmp) as input.
 

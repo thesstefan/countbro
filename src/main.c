@@ -9,20 +9,13 @@
 
 int main(int argc, char *argv[]) {
     struct Image *image = read_image_from_file(argv[1]);
-
     struct Grayscale *grayscale = to_grayscale_matrix(image);
-
-    struct Binary *binary = threshold(grayscale, 100);
+    struct Binary *binary = threshold(grayscale, 180);
 
     delete_grayscale(grayscale);
 
-    struct Kernel *opening_kernel = square_kernel(3);
-    struct Kernel *closing_kernel = square_kernel(5);
-
-    opening(binary, opening_kernel);
+    struct Kernel *closing_kernel = square_kernel(3);
     closing(binary, closing_kernel);
-
-    delete_kernel(opening_kernel);
     delete_kernel(closing_kernel);
 
     struct Labels *labels = labelling(binary);
