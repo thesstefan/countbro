@@ -59,3 +59,5 @@ and [coins_input.bmp](https://github.com/thesstefan/count_bro/blob/master/data/c
 <p align="center">
   <img src="https://github.com/thesstefan/Cell-Counter/blob/master/extra/cells_process.gif" alt="Cells GIF"/>
 </p>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
