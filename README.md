@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/thesstefan/countbro/blob/master/extra/count_bro.png" alt="Count Bro Logo"/>
+  <img src="https://github.com/thesstefan/countbro/tree/master/extra/count_bro.png" alt="Count Bro Logo"/>
 </p>
 
 # Count Bro
@@ -40,25 +40,25 @@ where `X` is the desired number of jobs to be ran in parallel.
 
 # Examples:
 
-1. Counting (1033) and detection of stars using [`extra/main_sky.c`](https://github.com/thesstefan/countbro/master/extra/main_sky.c) as source
-and [`data/sky_input.bmp`](https://github.com/thesstefan/countbro/blob/master/data/sky_input.bmp) as input.
+1. Counting (1033) and detection of stars using [`extra/main_sky.c`](https://github.com/thesstefan/countbro/tree/master/extra/main_sky.c) as source
+and [`data/sky_input.bmp`](https://github.com/thesstefan/countbro/tree/master/data/sky_input.bmp) as input.
 
 <p align="center">
-  <img src="https://github.com/thesstefan/Cell-Counter/blob/master/extra/sky_process.gif" alt="Sky GIF"/>
+  <img src="https://github.com/thesstefan/Cell-Counter/tree/master/extra/sky_process.gif" alt="Sky GIF"/>
 </p>
 
-2. Counting (10) and detection of some coins using [`extra/main_coins.c`](https://github.com/thesstefan/countbro/master/extra/main_coins.c) as source
-and [`data/coins_input.bmp`](https://github.com/thesstefan/countbro/blob/master/data/coins_input.bmp) as input.
+2. Counting (10) and detection of some coins using [`extra/main_coins.c`](https://github.com/thesstefan/countbro/tree/master/extra/main_coins.c) as source
+and [`data/coins_input.bmp`](https://github.com/thesstefan/countbro/tree/master/data/coins_input.bmp) as input.
 
 <p align="center">
-  <img src="https://github.com/thesstefan/Cell-Counter/blob/master/extra/coins_process.gif" alt="Coins GIF"/>
+  <img src="https://github.com/thesstefan/Cell-Counter/tree/master/extra/coins_process.gif" alt="Coins GIF"/>
 </p>
 
 3. Counting and detection (~184 with overlapping cells errors) of blood cells in a scan (the original purpose of the project), using 
-[`extra/main_cells.c`](https://github.com/thesstefan/countbro/blob/master/extra/main_cells.c) as source and 
-[`extra/data_input.bmp`](https://github.com/thesstefan/countbro/blob/master/data/cells_input.bmp) as input.
+[`extra/main_cells.c`](https://github.com/thesstefan/countbro/tree/master/extra/main_cells.c) as source and 
+[`extra/data_input.bmp`](https://github.com/thesstefan/countbro/tree/master/data/cells_input.bmp) as input.
 <p align="center">
-  <img src="https://github.com/thesstefan/Cell-Counter/blob/master/extra/cells_process.gif" alt="Cells GIF"/>
+  <img src="https://github.com/thesstefan/Cell-Counter/tree/master/extra/cells_process.gif" alt="Cells GIF"/>
 </p>
 
 # Future Plans:
