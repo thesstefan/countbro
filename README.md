@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/thesstefan/countbro/blob/master/extra/countbro.png" alt="Count Bro Logo"/>
+  <img src="https://github.com/thesstefan/countbro/blob/master/extra/count_bro.png" alt="Count Bro Logo"/>
 </p>
 
 # Count Bro
